@@ -1,0 +1,37 @@
+/* /pages/LandingPage.css */
+.hero-section {
+  background-image: url("../assets/img/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 100px;
+  text-align: center;
+  color: white;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.about-section,
+.featured-posts {
+  padding: 40px;
+  text-align: center;
+}
+
+.post-list {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.post-item {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  width: 30%;
+}

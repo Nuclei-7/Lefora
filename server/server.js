@@ -3,15 +3,21 @@ const express = require("express");
 const app = express();
 const http = require("http").Server(app);
 const mongoose = require("mongoose");
+const userRoutes = require("./routes/userRoutes"); // Adjust path as needed
+const cors = require("cors"); // Import cors
 
-// Use the environment variable for MongoDB connection
+// Middleware to parse JSON\
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json());
+
+// Use the user routes
+app.use("/api/users", userRoutes); // Ensure this is added
+
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
-
-    // Import the User model after MongoDB connection is successful
-    const User = require("./models/userModels");
   })
   .catch((err) => console.error("Could not connect to MongoDB", err));
 

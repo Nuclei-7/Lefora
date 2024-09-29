@@ -1,30 +1,79 @@
-/* /components/Navbar.css */
 .navbar {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 20px;
+  background-color: #222322;
+  color: white;
 }
 
 .logo a {
   color: white;
+  font-size: 1.5rem;
   text-decoration: none;
-  font-size: 24px;
 }
 
-.nav-links {
-  list-style-type: none;
+.search-bar {
   display: flex;
+  align-items: center;
 }
 
-.nav-links li {
-  margin-left: 20px;
+.search-bar input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
 }
 
-.nav-links a {
+.search-bar button {
+  padding: 5px 10px;
+  margin-left: 5px;
+  background-color: #fff;
+  color: #3c9a39;
+  border: none;
+  cursor: pointer;
+}
+
+.auth-section a {
   color: white;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 1rem;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 5px 0;
+  text-decoration: none;
+  color: black;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

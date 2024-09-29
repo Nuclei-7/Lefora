@@ -1,0 +1,70 @@
+/* General Layout */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+/* Left Sidebar */
+.left-sidebar {
+  width: 20%;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.left-sidebar h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.left-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.left-sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.left-sidebar ul li a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex: 1; /* Allow the main content to grow and fill space */
+  padding: 20px;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+  width: 20%;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-left: 1px solid #ddd;
+}
+
+.right-sidebar h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.right-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.right-sidebar ul li {
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #f5f5f5;
+  margin-top: auto; /* Push footer to the bottom */
+}

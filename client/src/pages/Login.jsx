@@ -16,7 +16,7 @@ function Login() {
       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
-          navigate("/home");
+          navigate("/profile");
         } else {
           console.error("Login failed:", result.data);
         }

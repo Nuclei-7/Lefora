@@ -5,12 +5,13 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login"; // Placeholder for now
 import Register from "./pages/Register"; // Placeholder for now
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/sample")
+      .get("http://localhost:3001/api/posts")
       .then((response) => {
         setData(response.data);
       })
@@ -26,6 +27,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
     // <div>

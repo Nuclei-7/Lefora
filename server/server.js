@@ -4,6 +4,7 @@ const app = express();
 const http = require("http").Server(app);
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes"); // Adjust path as needed
+const postRoute = require("./routes/postRoute"); // Adjust the path as needed
 const cors = require("cors"); // Import cors
 
 // Middleware to parse JSON\
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Use the user routes
 app.use("/api/users", userRoutes); // Ensure this is added
+app.use("/api/posts", postRoute); // for posts
 
 // Connect to MongoDB
 mongoose

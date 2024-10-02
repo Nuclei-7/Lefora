@@ -11,12 +11,19 @@ const Home = () => {
     content: "",
     author: "Current User", // Placeholder, update with actual user
   });
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay state
 
   // Fetch posts on component mount
   useEffect(() => {
     axios
       .get("http://localhost:3001/api/posts")
-      .then((res) => setPosts(res.data))
+      .then((res) => {
+        // Sort posts by creation date in descending order
+        const sortedPosts = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPosts(sortedPosts);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -27,10 +34,16 @@ const Home = () => {
       .then(() => {
         alert("Post created successfully!");
         setNewPost({ title: "", content: "", author: "Current User" });
+        setIsOverlayOpen(false); // Close overlay
         // Fetch updated posts
-        return axios.get("http://localhost:3001/posts");
+        return axios.get("http://localhost:3001/api/posts");
       })
-      .then((res) => setPosts(res.data))
+      .then((res) => {
+        const sortedPosts = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPosts(sortedPosts);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -62,38 +75,54 @@ const Home = () => {
             others!
           </p>
 
-          {/* Post Creation Form */}
-          <div className="post-creation">
-            <h3>Create a New Post</h3>
-            <form onSubmit={handleCreatePost} className="create-post-form">
-              <div className="form-group">
-                <label htmlFor="title">Title</label>
-                <input
-                  type="text"
-                  id="title"
-                  value={newPost.title}
-                  onChange={(e) =>
-                    setNewPost({ ...newPost, title: e.target.value })
-                  }
-                  required
-                />
+          {/* Button to Open Overlay */}
+          <button onClick={() => setIsOverlayOpen(true)} className="btn">
+            Create Post
+          </button>
+
+          {/* Overlay for Creating Post */}
+          {isOverlayOpen && (
+            <div className="overlay">
+              <div className="overlay-content">
+                <h3>Create a New Post</h3>
+                <form onSubmit={handleCreatePost} className="create-post-form">
+                  <div className="form-group">
+                    <label htmlFor="title">Title</label>
+                    <input
+                      type="text"
+                      id="title"
+                      value={newPost.title}
+                      onChange={(e) =>
+                        setNewPost({ ...newPost, title: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="content">Content</label>
+                    <textarea
+                      id="content"
+                      value={newPost.content}
+                      onChange={(e) =>
+                        setNewPost({ ...newPost, content: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="btn">
+                    Create Post
+                  </button>
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => setIsOverlayOpen(false)} // Close overlay
+                  >
+                    Cancel
+                  </button>
+                </form>
               </div>
-              <div className="form-group">
-                <label htmlFor="content">Content</label>
-                <textarea
-                  id="content"
-                  value={newPost.content}
-                  onChange={(e) =>
-                    setNewPost({ ...newPost, content: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <button type="submit" className="btn">
-                Create Post
-              </button>
-            </form>
-          </div>
+            </div>
+          )}
 
           {/* Display Posts */}
           <div className="posts-list">
@@ -127,7 +156,6 @@ const Home = () => {
           </ul>
         </div>
       </div>
-      {/* Footer */}
       <Footer />
     </div>
   );

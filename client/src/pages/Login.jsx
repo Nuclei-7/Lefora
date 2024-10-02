@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -16,6 +17,12 @@ function Login() {
       .then((result) => {
         console.log(result);
         if (result.data === "Success") {
+          // Store login status and email in localStorage
+          localStorage.setItem("isLoggedIn", true);
+          localStorage.setItem("email", email);
+
+          // Update the state and navigate to the profile page
+          setLoggedIn(true);
           navigate("/profile");
         } else {
           console.error("Login failed:", result.data);
@@ -28,7 +35,7 @@ function Login() {
 
   return (
     <>
-      <Navbar />
+      <Navbar loggedIn={loggedIn} />
       <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
         <div className="bg-white p-3 rounded w-25">
           <h2>Login</h2>

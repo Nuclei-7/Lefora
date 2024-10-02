@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/img/profile.png";
 import "./Navbar.css";
+import logo from "../assets/img/lefora.jpeg";
 
 function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -34,7 +35,9 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/home">Lefora</Link>
+        <Link to="/home">
+          <img src={logo} alt="logo" className="profileLogo" />
+        </Link>
       </div>
 
       {/* Conditionally show search bar only on the home page */}

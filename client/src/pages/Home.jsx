@@ -65,6 +65,21 @@ const Home = () => {
               <a href="#my-answers">My Answers</a>
             </li>
           </ul>
+          <h3>Communities</h3>
+          <ul>
+            <li>
+              <a href="#communities">Communities</a>
+            </li>
+            <li>
+              <a href="#homeGaredeners">Home Gardeners</a>
+            </li>
+            <li>
+              <a href="#homeGaredeners">Professional Gardener</a>
+            </li>
+            <li>
+              <a href="#homeGaredeners">nursery owners </a>
+            </li>
+          </ul>
         </div>
 
         {/* Main Content */}
@@ -139,21 +154,6 @@ const Home = () => {
               <p>No posts yet. Be the first to create one!</p>
             )}
           </div>
-        </div>
-
-        {/* Right Sidebar */}
-        <div className="right-sidebar">
-          <h3>Top Contributors</h3>
-          <ul>
-            <li>Contributor 1</li>
-            <li>Contributor 2</li>
-          </ul>
-
-          <h3>Top Helpers</h3>
-          <ul>
-            <li>Helper 1</li>
-            <li>Helper 2</li>
-          </ul>
         </div>
       </div>
       <Footer />

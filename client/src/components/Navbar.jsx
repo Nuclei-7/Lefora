@@ -47,6 +47,12 @@ function Navbar() {
         </div>
       )}
 
+      <div className="shop-link">
+        <Link to="/shop" className="shop-link">
+          Lefora Shop
+        </Link>
+      </div>
+
       <div className="auth-section">
         {loggedIn ? (
           <div className="profile">

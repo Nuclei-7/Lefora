@@ -6,6 +6,10 @@ import Login from "./pages/Login"; // Placeholder for now
 import Register from "./pages/Register"; // Placeholder for now
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import LeforaShop from "./pages/LeforaShop";
+import PostDetails from "./components/PostDetails";
+import "@fortawesome/fontawesome-free/css/all.min.css"; //import icons
+
 function App() {
   const [data, setData] = useState(null);
 
@@ -26,6 +30,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/shop" element={<LeforaShop />} />
+        <Route path="/posts/:id" element={<PostDetails />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>

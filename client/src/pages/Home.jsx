@@ -16,12 +16,13 @@ const Home = () => {
     author: "Current User", // Placeholder, update with actual user
   });
 
+  const [selectedImages, setSelectedImages] = useState([]); // State for storing selected images
+
   // Fetch posts on component mount
   useEffect(() => {
     axios
       .get("http://localhost:3001/api/posts")
       .then((res) => {
-        // Sort posts by creation date in descending order
         const sortedPosts = res.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
@@ -43,14 +44,37 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
-  // Handle creating new post
+  // Handle image selection
+  const handleImageChange = (e) => {
+    setSelectedImages(e.target.files);
+  };
+
+  // Handle creating new post with image upload
   const handleCreatePost = (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", newPost.title);
+    formData.append("content", newPost.content);
+    formData.append("author", newPost.author);
+
+    // Append each selected image to the formData
+    if (selectedImages) {
+      for (let i = 0; i < selectedImages.length; i++) {
+        formData.append("images", selectedImages[i]);
+      }
+    }
+
     axios
-      .post("http://localhost:3001/api/posts", newPost)
+      .post("http://localhost:3001/api/posts", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then(() => {
         alert("Post created successfully!");
         setNewPost({ title: "", content: "", author: "Current User" });
+        setSelectedImages([]); // Clear selected images
         setIsOverlayOpen(false); // Close overlay
         // Fetch updated posts
         return axios.get("http://localhost:3001/api/posts");
@@ -84,7 +108,6 @@ const Home = () => {
               </li>
               <li>
                 <a href="#communities">Communities</a>{" "}
-                {/* Added Communities tab */}
               </li>
             </ul>
           </div>
@@ -110,6 +133,7 @@ const Home = () => {
                   <form
                     onSubmit={handleCreatePost}
                     className="create-post-form"
+                    encType="multipart/form-data"
                   >
                     <div className="form-group">
                       <label htmlFor="title">Title</label>
@@ -134,6 +158,19 @@ const Home = () => {
                         required
                       />
                     </div>
+
+                    {/* Image Upload Field */}
+                    <div className="form-group">
+                      <label htmlFor="images">Upload Images</label>
+                      <input
+                        type="file"
+                        id="images"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                    </div>
+
                     <button type="submit" className="btn">
                       Create Post
                     </button>
@@ -160,6 +197,19 @@ const Home = () => {
                     </Link>
                     <p>{post.content}</p>
                     <p className="author">Posted by: {post.author}</p>
+
+                    {/* Display Images */}
+                    <div className="post-images">
+                      {post.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={`http://localhost:3001/${image}`}
+                          alt={`Post Image ${index + 1}`}
+                          className="post-image"
+                        />
+                      ))}
+                    </div>
+
                     <div className="post-actions">
                       <button
                         className="like-btn"

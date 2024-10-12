@@ -1,6 +1,20 @@
 const express = require("express");
+const multer = require("multer");
 const router = express.Router();
-const Post = require("../models/postModel"); // Assuming you have a Post model
+const Post = require("../models/postModel");
+
+// Setup Multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Directory to store uploaded images
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); // Generate a unique filename
+  },
+});
+
+// Use `array` to allow multiple file uploads
+const upload = multer({ storage: storage }).array("images"); // Change from single to array
 
 // GET all posts
 router.get("/", async (req, res) => {
@@ -12,12 +26,14 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch posts" });
   }
 });
-// Route to create a post
-router.post("/", async (req, res) => {
+
+// Route to create a post with images
+router.post("/", upload, async (req, res) => {
   const { title, content, author } = req.body;
+  const images = req.files ? req.files.map((file) => file.path) : []; // Get paths of all uploaded images
 
   try {
-    const newPost = new Post({ title, content, author });
+    const newPost = new Post({ title, content, author, images }); // Store array of image paths in the post model
     await newPost.save();
     res
       .status(201)
@@ -27,7 +43,8 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-// get single post
+
+// GET single post by ID
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -37,7 +54,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Add a comment
+// Add a comment to a post
 router.post("/:id/comments", async (req, res) => {
   const { author, text } = req.body;
   try {

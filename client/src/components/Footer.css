@@ -4,6 +4,8 @@
   color: white;
   padding: 20px;
   text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
 }
 
 .footer ul {
@@ -14,4 +16,8 @@
 .footer li {
   display: inline;
   margin: 0 10px;
+  color: azure;
+}
+a {
+  color: aqua;
 }

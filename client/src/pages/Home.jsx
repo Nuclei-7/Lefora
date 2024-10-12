@@ -115,6 +115,34 @@ const Home = () => {
           {/* Main Content */}
           <div className="center-content">
             <h2>Welcome to Lefora!</h2>
+            <div className="forum-stats">
+              <div className="stat-item">
+                <div className="stat-number">1,234</div>
+                <div className="stat-label">Members</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">5,678</div>
+                <div className="stat-label">Posts</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">9,012</div>
+                <div className="stat-label">Comments</div>
+              </div>
+            </div>
+            <div className="featured-topics">
+              <h3>Featured Topics</h3>
+              <ul>
+                <li>
+                  <a href="#spring-planting">Spring Planting Guide</a>
+                </li>
+                <li>
+                  <a href="#pest-control">Organic Pest Control</a>
+                </li>
+                <li>
+                  <a href="#composting">Composting 101</a>
+                </li>
+              </ul>
+            </div>
             <p>
               Explore our gardening community and share your knowledge with
               others!
@@ -127,7 +155,7 @@ const Home = () => {
 
             {/* Overlay for Creating Post */}
             {isOverlayOpen && (
-              <div className="overlay">
+              <div className={`overlay ${isOverlayOpen ? "active" : ""}`}>
                 <div className="overlay-content">
                   <h3>Create a New Post</h3>
                   <form

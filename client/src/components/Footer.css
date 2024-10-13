@@ -1,11 +1,15 @@
 /* /components/Footer.css */
+
 .footer {
-  background-color: #333;
-  color: white;
+  background-color: #f8f8f8; /* Soft off-white background */
+  color: #333; /* Dark text for better visibility */
   padding: 20px;
   text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Arial", "Helvetica", sans-serif;
   font-style: normal;
+  border-radius: 5px; /* Slightly rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin-top: 20px; /* Space above the footer */
 }
 
 .footer ul {
@@ -15,9 +19,33 @@
 
 .footer li {
   display: inline;
-  margin: 0 10px;
-  color: azure;
+  margin: 0 15px; /* Increased margin for better spacing */
+  color: #555; /* Slightly lighter color for the text */
+  transition: color 0.3s; /* Transition for hover effect */
 }
+
+.footer li:hover {
+  color: #007bff; /* Change color on hover */
+}
+
 .footer a {
   color: rgb(12, 13, 13);
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+.footer a:hover {
+  color: #007bff; /* Change link color on hover */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .footer {
+    padding: 15px; /* Reduced padding on smaller screens */
+  }
+
+  .footer li {
+    margin: 0 8px; /* Adjust margin for smaller screens */
+  }
 }

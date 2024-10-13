@@ -214,7 +214,7 @@ const Home = () => {
                         <img
                           key={index}
                           src={`http://localhost:3001/${image}`}
-                          alt={`Post Image ${index + 1}`}
+                          alt=""
                           className="post-image"
                         />
                       ))}

@@ -3,34 +3,24 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/img/profile.png";
 import "./Navbar.css";
 import logo from "../assets/img/lefora.jpeg";
+import { useAuth } from "../services/AuthContext"; // Import AuthContext
 
 function Navbar() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [email, setEmail] = useState("");
+  const { currentUser, logout } = useAuth(); // Use AuthContext for current user and logout
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const storedEmail = localStorage.getItem("email");
-
-    if (isLoggedIn) {
-      setLoggedIn(true);
-      setEmail(storedEmail);
-    }
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("email");
-    setLoggedIn(false);
+    logout(); // Use the logout function from AuthContext
     navigate("/login");
   };
 
   const handleProfileClick = () => {
-    const userId = localStorage.getItem("userId"); // Retrieve user ID from localStorage
-    navigate(`/profile/${userId}`);
+    const userId = currentUser ? currentUser.id : null; // Get user ID from currentUser
+    if (userId) {
+      navigate(`/profile/${userId}`);
+    }
   };
 
   return (
@@ -56,7 +46,7 @@ function Navbar() {
       </div>
 
       <div className="auth-section">
-        {loggedIn ? (
+        {currentUser ? (
           <div className="profile">
             <img
               src={icon}

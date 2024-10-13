@@ -5,7 +5,7 @@ import "./PostDetails.css";
 import Navbar from "./Navbar";
 import { useAuth } from "../services/AuthContext"; // Adjust path as needed
 
-const PostDetails = () => {
+export default function PostDetails() {
   const { id } = useParams();
   const { currentUser } = useAuth(); // Get current user from AuthContext
   const [post, setPost] = useState(null);
@@ -14,38 +14,53 @@ const PostDetails = () => {
   useEffect(() => {
     const fetchPost = async () => {
       console.log("Current User in PostDetails:", currentUser);
-      console.log("Fetching post with ID:", id); // Debug: log the post ID being fetched
+      console.log("Fetching post with ID:", id);
       try {
         const res = await axios.get(`http://localhost:3001/api/posts/${id}`);
-        console.log("Post data fetched:", res.data); // Debug: log the fetched post data
+        console.log("Post data fetched:", res.data);
         setPost(res.data);
       } catch (err) {
-        console.error("Error fetching post:", err); // Debug: log any errors
+        console.error("Error fetching post:", err);
       }
     };
     fetchPost();
-  }, [id]);
+  }, [id, currentUser]);
 
   const handleAddComment = async (e) => {
     e.preventDefault();
-    console.log("Adding comment:", comment); // Debug: log the comment being added
+    console.log("Adding comment:", comment);
     try {
       const res = await axios.post(
         `http://localhost:3001/api/posts/${id}/comments`,
         {
-          author: currentUser ? currentUser.username : "Anonymous", // Use current user's username or default to "Anonymous"
+          author: currentUser ? currentUser.username : "Anonymous",
           text: comment,
         }
       );
-      console.log("Comment added successfully:", res.data); // Debug: log the response after adding comment
-      setPost(res.data.post); // Update post with new comments
-      setComment(""); // Clear the comment input after submission
+      console.log("Comment added successfully:", res.data);
+      setPost(res.data.post);
+      setComment("");
     } catch (err) {
-      console.error("Error adding comment:", err); // Debug: log any errors
+      console.error("Error adding comment:", err);
     }
   };
 
-  if (!post) return <div>Loading...</div>; // Show loading message if post is not yet fetched
+  const handleLikePost = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:3001/api/posts/${id}/like`,
+        {
+          userId: currentUser ? currentUser.id : null,
+        }
+      );
+      console.log("Post liked successfully:", res.data);
+      setPost(res.data.post);
+    } catch (err) {
+      console.error("Error liking post:", err);
+    }
+  };
+
+  if (!post) return <div>Loading...</div>;
 
   return (
     <>
@@ -55,7 +70,30 @@ const PostDetails = () => {
           <h2 className="post-title">{post.title}</h2>
           <p className="post-content">{post.content}</p>
           <p className="post-author">Posted by: {post.author}</p>
-          <p className="post-likes">Likes: {post.likes}</p>
+
+          {post.images && post.images.length > 0 && (
+            <div className="post-images">
+              {post.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={`http://localhost:3001/${image}`}
+                  alt={`Post image ${index + 1}`}
+                  className="post-image"
+                />
+              ))}
+            </div>
+          )}
+
+          <p className="post-likes">
+            Likes: {post.likes}
+            <button
+              className="like-button"
+              onClick={handleLikePost}
+              aria-label="Like Post"
+            >
+              ❤️
+            </button>
+          </p>
         </div>
 
         <div className="comments-section">
@@ -63,9 +101,8 @@ const PostDetails = () => {
           {post.comments.length > 0 ? (
             post.comments.map((comment, index) => (
               <div key={index} className="comment">
-                <p className="comment-text">
-                  {comment.author}: {comment.text}
-                </p>
+                <p className="comment-author">{comment.author}</p>
+                <p className="comment-text">{comment.text}</p>
                 <p className="comment-date">
                   {new Date(comment.createdAt).toLocaleString()}
                 </p>
@@ -94,6 +131,4 @@ const PostDetails = () => {
       </div>
     </>
   );
-};
-
-export default PostDetails;
+}

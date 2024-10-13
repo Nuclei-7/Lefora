@@ -33,6 +33,8 @@ function Login() {
         localStorage.setItem("email", email);
         localStorage.setItem("userId", result.data.userId);
         localStorage.setItem("username", result.data.user); // Make sure this matches the response
+        // After successful login in your login function
+        localStorage.setItem("user", JSON.stringify(result.data)); // Assuming `res.data` contains user info/token
 
         // Update the context with current user data
         login(userData); // This should correctly update the context

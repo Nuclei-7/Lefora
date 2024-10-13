@@ -77,7 +77,7 @@ export default function PostDetails() {
                 <img
                   key={index}
                   src={`http://localhost:3001/${image}`}
-                  alt={`Post image ${index + 1}`}
+                  alt=""
                   className="post-image"
                 />
               ))}

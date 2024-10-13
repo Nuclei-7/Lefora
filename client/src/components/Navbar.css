@@ -27,7 +27,7 @@
 }
 
 .logo a:hover {
-  color: #5a5a5a; /* Change to white on hover */
+  color: #ffffff; /* Change to white on hover */
 }
 
 /* Search Bar */
@@ -82,7 +82,7 @@
 .auth-section a {
   color: #000000;
   text-decoration: none;
-  font-size: 1.1rem; /* Slightly smaller font size */
+  font-size: 0.9rem; /* Slightly smaller font size */
   margin-left: 15px; /* Reduced margin */
   transition: color 0.3s ease;
 }
@@ -172,6 +172,24 @@
 }
 
 .shop-link:hover {
+  color: #ffffff; /* Change to white on hover */
+}
+
+/* Navbar Lefora Cart Link */
+.shop-cart {
+  color: #070807; /* Bright green to contrast with the dark navbar */
+  font-weight: 600;
+  margin-left: 15px; /* Reduced margin */
+  margin-right: 15px; /* Reduced margin */
+  text-decoration: none;
+  font-size: 0.9rem; /* Slightly smaller font size */
+  transition: color 0.3s ease;
+}
+.shop-cart a {
+  color: #000000;
+}
+
+.shop-cart:hover {
   color: #ffffff; /* Change to white on hover */
 }
 

@@ -10,6 +10,7 @@ import LeforaShop from "./pages/LeforaShop";
 import PostDetails from "./components/PostDetails";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { AuthProvider } from "./services/AuthContext";
+import CartPage from "./pages/CartPage/CartPage";
 
 function App() {
   const [data, setData] = useState(null);
@@ -38,6 +39,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home data={data} />} />{" "}
             {/* Pass data if needed */}
+            <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/shop" element={<LeforaShop />} />
             <Route path="/posts/:id" element={<PostDetails />} />

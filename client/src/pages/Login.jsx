@@ -3,39 +3,53 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
 import Navbar from "../components/Navbar";
+import { useAuth } from "../services/AuthContext"; // Adjust the path as necessary
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get the login function from AuthContext
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:3001/api/users/login", { email, password })
-      .then((result) => {
-        console.log(result);
-        if (result.data === "Success") {
-          // Store login status and email in localStorage
-          localStorage.setItem("isLoggedIn", true);
-          localStorage.setItem("email", email);
+    console.log("Logging in with:", email, password); // Debug: Log email and password
 
-          // Update the state and navigate to the profile page
-          setLoggedIn(true);
-          navigate("/profile");
-        } else {
-          console.error("Login failed:", result.data);
-        }
-      })
-      .catch((err) => {
-        console.error("Error during login:", err);
+    try {
+      const result = await axios.post("http://localhost:3001/api/users/login", {
+        email,
+        password,
       });
+      console.log("Login Response:", result.data);
+
+      if (result.data.message === "Success") {
+        const userData = {
+          username: result.data.user, // Change this to use 'user' from the response
+          id: result.data.userId,
+        };
+
+        // Store login status and user data in localStorage
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("email", email);
+        localStorage.setItem("userId", result.data.userId);
+        localStorage.setItem("username", result.data.user); // Make sure this matches the response
+
+        // Update the context with current user data
+        login(userData); // This should correctly update the context
+
+        // Navigate to the profile page
+        navigate(`/profile/${result.data.userId}`);
+      } else {
+        console.error("Login failed:", result.data);
+      }
+    } catch (err) {
+      console.error("Error during login:", err);
+    }
   };
 
   return (
     <>
-      <Navbar loggedIn={loggedIn} />
+      <Navbar />
       <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
         <div className="bg-white p-3 rounded w-25">
           <h2>Login</h2>
@@ -45,7 +59,7 @@ function Login() {
                 <strong>Email</strong>
               </label>
               <input
-                type="text"
+                type="email" // Changed to email type for better input handling
                 placeholder="Enter Email"
                 autoComplete="off"
                 name="email"

@@ -1,150 +1,176 @@
-/* General container for the whole component */
+:root {
+  --primary-color: #444749;
+  --secondary-color: #2ecc71;
+  --background-color: #f9f9f9;
+  --text-color: #333;
+  --text-light: #777;
+  --card-bg: #fff;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
 .post-details-container {
   max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 .post-card {
-  padding: 20px;
-  background-color: #ffffff;
+  background-color: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: var(--transition);
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px var(--shadow-color);
 }
 
 .post-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .post-content {
-  font-size: 16px;
-  line-height: 1.5;
-  color: #555;
-  margin-bottom: 10px;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
 }
 
 .post-author,
 .post-likes {
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
 }
 
-/* Like button with heart icon */
 .like-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 16px;
-  background-color: #e74c3c;
-  color: white;
+  background-color: transparent;
   border: none;
-  border-radius: 5px;
+  color: var(--primary-color);
+  font-size: 1.5rem;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-
-.like-button i {
-  margin-right: 2px;
+  transition: var(--transition);
 }
 
 .like-button:hover {
-  background-color: #c0392b;
+  color: #e74c3c;
+  transform: scale(1.1);
 }
 
 .comments-section {
-  margin-top: 30px;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  padding: 2rem;
 }
 
 .comments-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
 }
 
 .comment {
-  background-color: #ffffff;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: var(--transition);
+}
+
+.comment:hover {
+  background-color: #e8e8e8;
 }
 
 .comment-text {
-  font-size: 16px;
-  color: #555;
+  margin: 0 0 0.5rem 0;
 }
 
 .comment-date {
-  font-size: 12px;
-  color: #999;
-  margin-top: 5px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin: 0;
 }
 
 .comment-form {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .input-author,
 .input-comment {
-  font-size: 16px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
   width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.input-author:focus,
+.input-comment:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 .input-comment {
-  height: 80px;
+  min-height: 100px;
+  resize: vertical;
 }
 
 .submit-comment {
-  padding: 10px;
-  background-color: #3c9a39;
+  background-color: var(--secondary-color);
   color: white;
   border: none;
-  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  transition: var(--transition);
 }
 
 .submit-comment:hover {
-  background-color: #2e7d29;
+  background-color: #27ae60;
+  transform: translateY(-2px);
 }
 
-/* Responsive styling */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .post-details-container {
-    padding: 10px;
+    padding: 0 0.5rem;
+  }
+
+  .post-card,
+  .comments-section {
+    padding: 1.5rem;
   }
 
   .post-title {
-    font-size: 20px;
+    font-size: 2rem;
   }
 
-  .post-content,
-  .comment-text {
-    font-size: 14px;
-  }
-
-  .input-author,
-  .input-comment {
-    font-size: 14px;
-  }
-
-  .like-button,
-  .submit-comment {
-    font-size: 12px;
+  .post-content {
+    font-size: 1rem;
   }
 }

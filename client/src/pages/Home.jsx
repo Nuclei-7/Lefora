@@ -5,15 +5,18 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import { FaHeart, FaCommentAlt } from "react-icons/fa"; // Import icons
 import "./home.css";
+import img1 from "../assets/img/p1.svg";
+import { useAuth } from "../services/AuthContext"; // Import AuthContext
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay state
+  const { currentUser } = useAuth(); // Get the current user from AuthContext
 
   const [newPost, setNewPost] = useState({
     title: "",
     content: "",
-    author: "Current User", // Placeholder, update with actual user
+    author: currentUser ? currentUser.username : "Anonymous", // Use actual username if available
   });
 
   const [selectedImages, setSelectedImages] = useState([]); // State for storing selected images
@@ -56,7 +59,7 @@ const Home = () => {
     const formData = new FormData();
     formData.append("title", newPost.title);
     formData.append("content", newPost.content);
-    formData.append("author", newPost.author);
+    formData.append("author", currentUser ? currentUser.username : "Anonymous"); // Use the actual username
 
     // Append each selected image to the formData
     if (selectedImages) {
@@ -73,7 +76,11 @@ const Home = () => {
       })
       .then(() => {
         alert("Post created successfully!");
-        setNewPost({ title: "", content: "", author: "Current User" });
+        setNewPost({
+          title: "",
+          content: "",
+          author: currentUser ? currentUser.username : "Anonymous",
+        }); // Reset the author to the current user
         setSelectedImages([]); // Clear selected images
         setIsOverlayOpen(false); // Close overlay
         // Fetch updated posts
@@ -107,7 +114,7 @@ const Home = () => {
                 <a href="#my-answers">My Answers</a>
               </li>
               <li>
-                <a href="#communities">Communities</a>{" "}
+                <a href="#communities">Communities</a>
               </li>
             </ul>
           </div>
@@ -115,33 +122,8 @@ const Home = () => {
           {/* Main Content */}
           <div className="center-content">
             <h2>Welcome to Lefora!</h2>
-            <div className="forum-stats">
-              <div className="stat-item">
-                <div className="stat-number">1,234</div>
-                <div className="stat-label">Members</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">5,678</div>
-                <div className="stat-label">Posts</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">9,012</div>
-                <div className="stat-label">Comments</div>
-              </div>
-            </div>
-            <div className="featured-topics">
-              <h3>Featured Topics</h3>
-              <ul>
-                <li>
-                  <a href="#spring-planting">Spring Planting Guide</a>
-                </li>
-                <li>
-                  <a href="#pest-control">Organic Pest Control</a>
-                </li>
-                <li>
-                  <a href="#composting">Composting 101</a>
-                </li>
-              </ul>
+            <div className="welcomeImg-box">
+              <img className="welcome-image" src={img1} alt="photo" />
             </div>
             <p>
               Explore our gardening community and share your knowledge with

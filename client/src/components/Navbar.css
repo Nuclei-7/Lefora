@@ -3,64 +3,74 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #222322;
-  color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 8px 20px; /* Reduced padding for a slimmer look */
+  background-color: var(--offwhite); /* Darker background */
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Reduced shadow for a cleaner look */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Centering the Search Bar */
+.search-container {
+  display: flex;
+  justify-content: center;
+  flex: 1; /* Take up available space */
 }
 
 /* Logo */
 .logo a {
-  color: #fff;
-  font-size: 1.8rem;
+  color: #000000; /* Green color for branding */
+  font-size: 1.6rem; /* Reduced font size for logo */
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 600; /* Slightly lighter font weight */
+  transition: color 0.3s ease;
 }
 
 .logo a:hover {
-  color: #4caf50; /* Green color on hover */
+  color: #ffffff; /* Change to white on hover */
 }
 
 /* Search Bar */
 .search-bar {
   display: flex;
   align-items: center;
-  flex: 1;
-  margin: 0 20px;
+  width: 100%; /* Ensure the search bar takes full width of its container */
+  max-width: 500px; /* Define a max width for the search bar */
 }
 
 .search-bar input {
-  padding: 10px;
-  border-radius: 25px;
-  border: none;
-  width: 100%;
-  max-width: 500px;
-  height: 45px;
-  background-color: #fff;
+  padding: 8px; /* Reduced padding */
+  border-radius: 25px; /* Rounded corners */
+  border: 1px solid #000000; /* Green border */
+  width: 100%; /* Take full width */
+  height: 35px; /* Reduced height */
+  background-color: #ffffff;
   color: #333;
-  font-size: 1rem;
-  transition: width 0.3s ease;
+  font-size: 0.9rem; /* Slightly smaller font size */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for focus */
 }
 
 .search-bar input:focus {
   outline: none;
-  border: 2px solid #4caf50;
+  border-color: #000000; /* Darker green on focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Shadow on focus */
 }
 
 .search-bar button {
-  padding: 10px 20px;
+  padding: 8px 15px; /* Reduced padding */
   margin-left: 10px;
-  background-color: #4caf50;
+  background-color: #000000;
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: 20px; /* Slightly smaller radius */
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
+  font-size: 0.9rem; /* Reduced font size */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Add transform transition */
 }
 
 .search-bar button:hover {
   background-color: #388e3c; /* Darker green on hover */
+  transform: scale(1.05); /* Slight scaling effect on hover */
 }
 
 /* Auth Section & Profile */
@@ -70,15 +80,15 @@
 }
 
 .auth-section a {
-  color: white;
+  color: #000000;
   text-decoration: none;
-  font-size: 1rem;
-  margin-left: 20px;
+  font-size: 0.9rem; /* Slightly smaller font size */
+  margin-left: 15px; /* Reduced margin */
   transition: color 0.3s ease;
 }
 
 .auth-section a:hover {
-  color: #4caf50;
+  color: #4caf50; /* Green on hover */
 }
 
 /* Profile and Dropdown */
@@ -90,12 +100,17 @@
 }
 
 .profile img {
-  width: 40px;
-  height: 40px;
+  width: 35px; /* Reduced size */
+  height: 35px; /* Reduced size */
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 8px; /* Reduced margin */
   object-fit: cover;
-  border: 2px solid #4caf50;
+  border: 2px solid #4caf50; /* Green border around profile picture */
+  transition: transform 0.3s ease; /* Smooth transition for scaling */
+}
+
+.profile img:hover {
+  transform: scale(1.1); /* Slight scaling effect on hover */
 }
 
 .dropdown {
@@ -105,28 +120,28 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  top: 50px;
+  top: 45px; /* Adjusted for the slimmer navbar */
   right: 0;
-  background-color: #fff;
+  background-color: #ffffff;
   color: #333;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Reduced shadow for dropdown */
   z-index: 10;
-  padding: 10px 0;
+  padding: 8px 0; /* Reduced padding */
   min-width: 150px;
 }
 
 .dropdown-content a {
-  padding: 10px 20px;
+  padding: 8px 15px; /* Reduced padding */
   display: block;
   color: #333;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.9rem; /* Slightly smaller font size */
   transition: background-color 0.3s ease;
 }
 
 .dropdown-content a:hover {
-  background-color: #f4f4f4;
+  background-color: #f4f4f4; /* Light grey on hover */
 }
 
 .dropdown:hover .dropdown-content {
@@ -135,11 +150,29 @@
 
 /* Profile Logo */
 .profileLogo {
-  width: 40px;
-  height: 40px;
+  width: 35px; /* Reduced size */
+  height: 35px; /* Reduced size */
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 8px; /* Reduced margin */
   object-fit: cover;
+}
+
+/* Navbar Lefora Shop Link */
+.shop-link {
+  color: #070807; /* Bright green to contrast with the dark navbar */
+  font-weight: 600;
+  margin-left: 15px; /* Reduced margin */
+  margin-right: 15px; /* Reduced margin */
+  text-decoration: none;
+  font-size: 0.9rem; /* Slightly smaller font size */
+  transition: color 0.3s ease;
+}
+.shop-link a {
+  color: #000000;
+}
+
+.shop-link:hover {
+  color: #ffffff; /* Change to white on hover */
 }
 
 /* Responsive Design */
@@ -154,10 +187,6 @@
     margin: 10px 0;
   }
 
-  .search-bar input {
-    width: 100%;
-  }
-
   .auth-section a {
     margin-left: 10px;
   }
@@ -169,41 +198,20 @@
 
 @media (max-width: 480px) {
   .logo a {
-    font-size: 1.4rem;
+    font-size: 1.4rem; /* Slightly smaller logo */
   }
 
   .auth-section a {
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Smaller font size */
     margin-left: 5px;
   }
 
   .profile img {
-    width: 35px;
-    height: 35px;
+    width: 30px; /* Reduced size */
+    height: 30px; /* Reduced size */
   }
 
   .search-bar input {
-    height: 40px;
-  }
-}
-/* Navbar Lefora Shop Link */
-.shop-link {
-  color: #4caf50; /* Bright green to contrast with the black navbar */
-  font-weight: 600;
-  margin-left: 20px;
-  margin-right: 20px;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
-
-.shop-link:hover {
-  color: #ffffff; /* White on hover for more emphasis */
-}
-
-/* Adjustments for Mobile Responsiveness */
-@media (max-width: 768px) {
-  .shop-link {
-    margin-left: 10px;
+    height: 35px; /* Reduced height */
   }
 }

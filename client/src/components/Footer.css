@@ -18,6 +18,6 @@
   margin: 0 10px;
   color: azure;
 }
-a {
-  color: aqua;
+.footer a {
+  color: rgb(12, 13, 13);
 }

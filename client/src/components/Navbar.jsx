@@ -29,28 +29,30 @@ function Navbar() {
   };
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    const userId = localStorage.getItem("userId"); // Retrieve user ID from localStorage
+    navigate(`/profile/${userId}`);
   };
 
   return (
     <nav className="navbar">
       <div className="logo">
         <Link to="/home">
-          <img src={logo} alt="logo" className="profileLogo" />
+          <h5>LEFORA</h5>
         </Link>
       </div>
 
-      {/* Conditionally show search bar only on the home page */}
+      {/* Search Container for Centering */}
       {location.pathname === "/home" && (
-        <div className="search-bar">
-          <input type="text" placeholder="Search topics..." />
+        <div className="search-container">
+          <div className="search-bar">
+            <input type="text" placeholder="Search topics..." />
+            {/* <button type="submit">Search</button> */}
+          </div>
         </div>
       )}
 
       <div className="shop-link">
-        <Link to="/shop" className="shop-link">
-          Lefora Shop
-        </Link>
+        <Link to="/shop">Lefora Shop</Link>
       </div>
 
       <div className="auth-section">

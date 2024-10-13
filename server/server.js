@@ -9,6 +9,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const User = require("./models/userModels"); // Ensure correct path to user model
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, "uploads");
@@ -47,11 +48,6 @@ mongoose
   })
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
-// Define a sample route to test the server
-app.get("/", (req, res) => {
-  res.send("Server is running and connected to MongoDB");
-});
-
 // Add a new route for handling multiple file uploads
 app.post("/upload-multiple", upload.array("images", 5), (req, res) => {
   if (!req.files) {
@@ -68,6 +64,12 @@ app.post("/upload-multiple", upload.array("images", 5), (req, res) => {
   }
 });
 
+// Define a sample route to test the server
+app.get("/", (req, res) => {
+  res.send("Server is running and connected to MongoDB");
+});
+
+// Start the server
 http.listen(3001, function () {
   console.log("Server is running on port 3001...");
 });

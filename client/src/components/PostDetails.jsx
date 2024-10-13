@@ -1,41 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "./PostDetails.css"; // Ensure you have this for styling
+import "./PostDetails.css";
 import Navbar from "./Navbar";
+import { useAuth } from "../services/AuthContext"; // Adjust path as needed
 
 const PostDetails = () => {
   const { id } = useParams();
+  const { currentUser } = useAuth(); // Get current user from AuthContext
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
-  const [author, setAuthor] = useState("Current User");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/posts/${id}`)
-      .then((res) => setPost(res.data))
-      .catch((err) => console.log(err));
+    const fetchPost = async () => {
+      console.log("Current User in PostDetails:", currentUser);
+      console.log("Fetching post with ID:", id); // Debug: log the post ID being fetched
+      try {
+        const res = await axios.get(`http://localhost:3001/api/posts/${id}`);
+        console.log("Post data fetched:", res.data); // Debug: log the fetched post data
+        setPost(res.data);
+      } catch (err) {
+        console.error("Error fetching post:", err); // Debug: log any errors
+      }
+    };
+    fetchPost();
   }, [id]);
 
-  const handleAddComment = (e) => {
+  const handleAddComment = async (e) => {
     e.preventDefault();
-    axios
-      .post(`http://localhost:3001/api/posts/${id}/comments`, {
-        author,
-        text: comment,
-      })
-      .then((res) => setPost(res.data.post))
-      .catch((err) => console.log(err));
+    console.log("Adding comment:", comment); // Debug: log the comment being added
+    try {
+      const res = await axios.post(
+        `http://localhost:3001/api/posts/${id}/comments`,
+        {
+          author: currentUser ? currentUser.username : "Anonymous", // Use current user's username or default to "Anonymous"
+          text: comment,
+        }
+      );
+      console.log("Comment added successfully:", res.data); // Debug: log the response after adding comment
+      setPost(res.data.post); // Update post with new comments
+      setComment(""); // Clear the comment input after submission
+    } catch (err) {
+      console.error("Error adding comment:", err); // Debug: log any errors
+    }
   };
 
-  const handleLikePost = () => {
-    axios
-      .post(`http://localhost:3001/api/posts/${id}/like`)
-      .then((res) => setPost(res.data.post))
-      .catch((err) => console.log(err));
-  };
-
-  if (!post) return <div>Loading...</div>;
+  if (!post) return <div>Loading...</div>; // Show loading message if post is not yet fetched
 
   return (
     <>
@@ -46,9 +56,6 @@ const PostDetails = () => {
           <p className="post-content">{post.content}</p>
           <p className="post-author">Posted by: {post.author}</p>
           <p className="post-likes">Likes: {post.likes}</p>
-          <button className="like-button" onClick={handleLikePost}>
-            <i className="fas fa-heart"></i>
-          </button>
         </div>
 
         <div className="comments-section">
@@ -69,14 +76,9 @@ const PostDetails = () => {
           )}
 
           <form className="comment-form" onSubmit={handleAddComment}>
-            <input
-              type="text"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              placeholder="Your name"
-              className="input-author"
-              required
-            />
+            <p className="current-user">
+              Logged in as: {currentUser ? currentUser.username : "Anonymous"}
+            </p>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}

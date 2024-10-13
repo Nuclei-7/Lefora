@@ -28,6 +28,17 @@ body {
   display: flex;
   gap: 30px;
 }
+.welcomeImg-box {
+  width: 100%;
+  height: 100px; /* Fixed height */
+  display: flex;
+}
+
+.welcome-image {
+  width: 100%; /* Stretch the image to fill the container's width */
+  height: 100px; /* Maintain a fixed height */
+  object-fit: cover; /* Ensure the image fills the container without distortion */
+}
 
 .left-sidebar {
   flex: 0 0 250px;
@@ -100,6 +111,7 @@ body {
 }
 
 .btn {
+  display: flex;
   background-color: var(--primary-green);
   color: var(--text-light);
   border: none;
@@ -111,6 +123,9 @@ body {
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .btn:hover {

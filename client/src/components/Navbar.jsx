@@ -55,6 +55,12 @@ function Navbar() {
         <Link to="/shop">Lefora Shop</Link>
       </div>
 
+      {loggedIn && (
+        <div className="shop-cart">
+          <Link to="/cart">My Cart</Link>
+        </div>
+      )}
+
       <div className="auth-section">
         {loggedIn ? (
           <div className="profile">

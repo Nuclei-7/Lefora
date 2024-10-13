@@ -1,0 +1,23 @@
+/* /components/Footer.css */
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+}
+
+.footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer li {
+  display: inline;
+  margin: 0 10px;
+  color: azure;
+}
+.footer a {
+  color: rgb(12, 13, 13);
+}

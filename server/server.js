@@ -10,6 +10,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const User = require("./models/userModels"); // Ensure correct path to user model
+const orderRoutes = require("./routes/orderRoutes");
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, "uploads");
@@ -20,6 +21,7 @@ if (!fs.existsSync(uploadsDir)) {
 // Middleware to parse JSON
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
+app.use("/api/orders", orderRoutes);
 
 // Setup Multer for multiple image uploads
 const storage = multer.diskStorage({

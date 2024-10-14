@@ -2,8 +2,11 @@
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import "./CartPage.css";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -70,14 +73,30 @@ const CartPage = () => {
     setDeliveryInfo({ ...deliveryInfo, [e.target.name]: e.target.value });
   };
 
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length === 0) {
-      // Proceed with order confirmation if no validation errors
-      console.log("Order confirmed!", cartItems, deliveryInfo);
-      setErrors({});
+      try {
+        // API call to save the order in the backend
+        const response = await axios.post(
+          "http://localhost:3001/api/orders/create",
+          {
+            cartItems,
+            deliveryInfo,
+            totalPrice,
+          }
+        );
+
+        if (response.data.message === "Order saved successfully!") {
+          console.log("Order confirmed and saved to the database!");
+          setErrors({});
+          navigate("/home");
+        }
+      } catch (err) {
+        console.error("Error saving order:", err);
+      }
     } else {
-      setErrors(validationErrors); // Set errors to display on the form
+      setErrors(validationErrors);
     }
   };
 
@@ -226,7 +245,7 @@ const CartPage = () => {
             <div className="schedule-delivery">
               <div className="form-group full-width">
                 <label>Dates</label>
-                <input type="text" placeholder="Select delivery date" />
+                <input type="date" placeholder="Select delivery date" />
               </div>
               <div className="form-group full-width">
                 <label>Note</label>

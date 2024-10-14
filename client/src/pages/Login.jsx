@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./login.css";
+import "./login.css"; // Assuming your CSS file is properly set
 import Navbar from "../components/Navbar";
 import { useAuth } from "../services/AuthContext"; // Adjust the path as necessary
 
@@ -52,47 +52,51 @@ function Login() {
   return (
     <>
       <Navbar />
-      <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-        <div className="bg-white p-3 rounded w-25">
-          <h2>Login</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email">
-                <strong>Email</strong>
+      <div className="login-container">
+        <div className="login-box">
+          <h2 className="login-title">Login</h2>
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Email
               </label>
               <input
-                type="email" // Changed to email type for better input handling
+                type="email"
                 placeholder="Enter Email"
                 autoComplete="off"
                 name="email"
-                className="form-control rounded-0"
+                className="form-input"
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
-            <div className="mb-3">
-              <label htmlFor="password">
-                <strong>Password</strong>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Password
               </label>
               <input
                 type="password"
                 placeholder="Enter Password"
                 autoComplete="off"
                 name="password"
-                className="form-control rounded-0"
+                className="form-input"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <button type="submit" className="btn btn-success w-100 rounded-0">
+
+            <button type="submit" className="login-button">
               Login
             </button>
 
-            <div className="mt-2">
-              <Link to="/register" className="link-button">
-                Sign Up
-              </Link>
+            <div className="register-link">
+              <p>
+                Don't have an account?{" "}
+                <Link to="/register" className="link-button">
+                  Sign Up
+                </Link>
+              </p>
             </div>
           </form>
         </div>

@@ -1,3 +1,4 @@
+//server.js
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -21,6 +22,10 @@ if (!fs.existsSync(uploadsDir)) {
 // Middleware to parse JSON
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
+
+// Use the user routes
+app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoute);
 app.use("/api/orders", orderRoutes);
 
 // Setup Multer for multiple image uploads
@@ -37,10 +42,6 @@ const upload = multer({ storage: storage });
 
 // Serve static files from the uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// Use the user routes
-app.use("/api/users", userRoutes);
-app.use("/api/posts", postRoute);
 
 // Connect to MongoDB
 mongoose

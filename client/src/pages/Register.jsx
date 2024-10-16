@@ -1,32 +1,29 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./register.css"; // Make sure to include this CSS file for Register
+import "./register.css"; // Your custom CSS
 import Navbar from "../components/Navbar";
 
-const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+function Register() {
+  const [userName, setName] = useState(""); // Set default to empty string
+  const [email, setEmail] = useState(""); // Set default to empty string
+  const [password, setPassword] = useState(""); // Set default to empty string
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/api/users/register",
-        {
-          username,
-          email,
-          password,
-        }
-      );
-      setSuccess(response.data.message);
-      setError(null);
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-      setSuccess(null);
-    }
+    axios
+      .post("http://localhost:3001/api/users/register", {
+        // Updated URL
+        name: userName,
+        email,
+        password,
+      })
+      .then((result) => {
+        console.log(result);
+        navigate("/login"); // Move navigate inside then block to only redirect after success
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -36,54 +33,48 @@ const Register = () => {
         <div className="login-box">
           <h2 className="login-title">Register</h2>
           <form className="login-form" onSubmit={handleSubmit}>
-            {error && <p className="text-danger">{error}</p>}
-            {success && <p className="text-success">{success}</p>}
-
             <div className="form-group">
-              <label htmlFor="username" className="form-label">
-                Username
+              <label htmlFor="name" className="form-label">
+                Name
               </label>
               <input
                 type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter Name"
+                autoComplete="off"
+                name="name"
                 className="form-input"
-                placeholder="Enter username"
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
-
             <div className="form-group">
               <label htmlFor="email" className="form-label">
                 Email
               </label>
               <input
                 type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter Email"
+                autoComplete="off"
+                name="email"
                 className="form-input"
-                placeholder="Enter email"
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
-
             <div className="form-group">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
                 type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter Password"
+                autoComplete="off"
+                name="password"
                 className="form-input"
-                placeholder="Enter password"
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-
             <button type="submit" className="login-button w-100">
               Register
             </button>
@@ -91,15 +82,15 @@ const Register = () => {
           <div className="register-link">
             <p>
               Already have an account?{" "}
-              <a href="/login" className="link-button">
+              <Link to="/login" className="link-button">
                 Login
-              </a>
+              </Link>
             </p>
           </div>
         </div>
       </div>
     </>
   );
-};
+}
 
 export default Register;

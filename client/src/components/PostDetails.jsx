@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./PostDetails.css";
 import Navbar from "./Navbar";
@@ -10,6 +10,8 @@ export default function PostDetails() {
   const { currentUser } = useAuth(); // Get current user from AuthContext
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -45,6 +47,21 @@ export default function PostDetails() {
     }
   };
 
+  const deletePost = async () => {
+    try {
+      const res = await axios.delete(`http://localhost:3001/api/posts/${id}`);
+      console.log(res.data.message); // Log success message
+      navigate("/home");
+      alert("Post deleted successfully!"); // Notify the user
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert(
+        error.response?.data?.message ||
+          "Failed to delete post. Please try again."
+      );
+    }
+  };
+
   const handleLikePost = async () => {
     try {
       const res = await axios.post(
@@ -69,6 +86,14 @@ export default function PostDetails() {
         <div className="post-card">
           <h2 className="post-title">{post.title}</h2>
           <p className="post-content">{post.content}</p>
+
+          {/* Only show the delete button if the current user is the author */}
+          {currentUser && currentUser.username === post.author && (
+            <button onClick={deletePost} className="delete-button">
+              Delete Post
+            </button>
+          )}
+
           <p className="post-author">Posted by: {post.author}</p>
 
           {post.images && post.images.length > 0 && (

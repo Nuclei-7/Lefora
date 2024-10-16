@@ -9,14 +9,14 @@
   --text-light: #ecf0f1;
 }
 
-body {
+/* body {
   font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
   background-color: var(--off-white);
   color: var(--text-dark);
   margin: 0;
   padding: 0;
   line-height: 1.6;
-}
+} */
 
 .home-container {
   max-width: 1200px;
@@ -41,18 +41,19 @@ body {
 }
 
 .left-sidebar {
+  position: sticky;
   flex: 0 0 250px;
-  background-color: white;
+  /* background-color: white;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   transition: all 0.3s ease;
-  height: fit-content;
+  /* height: fit-content; */
 }
 
-.left-sidebar:hover {
+/* .left-sidebar:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+} */
 
 .left-sidebar h3 {
   color: var(--dark-green);
@@ -68,23 +69,26 @@ body {
 }
 
 .left-sidebar li {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
+  padding-left: 10px;
 }
 
-.left-sidebar a {
+.topics a {
   color: var(--text-dark);
   text-decoration: none;
   font-size: 16px;
   transition: color 0.2s ease;
   display: flex;
   align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .left-sidebar a:hover {
   color: var(--primary-green);
 }
 
-.left-sidebar a::before {
+.topics a::before {
   content: "🌱";
   margin-right: 10px;
   font-size: 20px;
@@ -92,16 +96,16 @@ body {
 
 .center-content {
   flex: 1;
-  background-color: white;
+  /* background-color: white;
   border-radius: 10px;
   padding: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; */
 }
 
-.center-content:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+/* .center-content:hover {
+  /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+} */
 
 .center-content h2 {
   color: var(--dark-green);
@@ -403,13 +407,9 @@ body {
   color: var(--primary-green);
 }
 
-.search-bar {
-  margin-bottom: 30px;
-}
-
 .search-bar input {
   width: 100%;
-  padding: 12px;
+  /* padding: 12px; */
   border: 2px solid var(--light-green);
   border-radius: 30px;
   font-size: 16px;
@@ -423,4 +423,96 @@ body {
 }
 a {
   text-decoration: none;
+}
+
+.welcome {
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.pad-0 {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.topics {
+  position: sticky;
+  top: 10%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  height: fit-content;
+  margin-bottom: 15%;
+}
+
+.discussing-now {
+  position: sticky;
+  top: 47.5%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  height: fit-content;
+}
+
+.discussing-now a {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.discussing-now h4 {
+  margin: 0;
+}
+
+.focus-topic {
+  background-color: #f3f7fb;
+  border-radius: 20px;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light gray border */
+  border-top: 8px solid #4caf50; /* Green top border */
+  border-radius: 50%; /* Make it a circle */
+  width: 30px; /* Width of the spinner */
+  height: 30px; /* Height of the spinner */
+  animation: spin 1s linear infinite; /* Spin animation */
+}
+
+/* Keyframes for spinning animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.comment-length {
+  color: #bfbfd0 !important;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  margin: 0;
+}
+
+.gray-hr {
+  border: none; /* Remove default border */
+  border-top: 2px solid gray; /* Gray color with 2px thickness */
+  margin: 20px 0; /* Add vertical space around the hr */
+  opacity: 10%;
 }

@@ -102,21 +102,43 @@ const Home = () => {
         <div className="main-content">
           {/* Left Sidebar */}
           <div className="left-sidebar">
-            <h3>Topics</h3>
-            <ul>
-              <li>
-                <a href="#all">All Topics</a>
-              </li>
-              <li>
-                <a href="#my-topics">My Topics</a>
-              </li>
-              <li>
-                <a href="#my-answers">My Answers</a>
-              </li>
-              <li>
-                <a href="#communities">Communities</a>
-              </li>
-            </ul>
+            <div className="topics">
+              <h3>Topics</h3>
+              <ul>
+                <li className="focus-topic">
+                  <a href="#all">All Topics</a>
+                </li>
+                <li>
+                  <a href="#my-topics">My Topics</a>
+                </li>
+                <li>
+                  <a href="#my-answers">My Answers</a>
+                </li>
+                <li>
+                  <a href="#communities">Communities</a>
+                </li>
+              </ul>
+            </div>
+            <div className="discussing-now">
+              <h3>Discussing Now</h3>
+              {posts.length > 0 ? (
+                posts.slice(0, 3).map((post, index) => (
+                  <div key={post._id} className="disc">
+                    <Link to={`/posts/${post._id}`}>
+                      <h4>{post.title}</h4>
+                    </Link>
+                    <p className="comment-length">
+                      <FaCommentAlt className="icon pad-0" />{" "}
+                      {post.comments.length} answers
+                    </p>
+                    {index < 2 && <hr className="gray-hr" />}{" "}
+                    {/* Render <hr> only for the first two posts */}
+                  </div>
+                ))
+              ) : (
+                <div className="loader"></div>
+              )}
+            </div>
           </div>
 
           {/* Main Content */}
@@ -133,7 +155,7 @@ const Home = () => {
 
               {/* Button to Open Overlay */}
               <button onClick={() => setIsOverlayOpen(true)} className="btn">
-                Create Post
+                + Ask Question
               </button>
             </div>
 
@@ -231,14 +253,14 @@ const Home = () => {
                         {post.likes}
                       </button>
                       <Link to={`/posts/${post._id}`} className="comment-btn">
-                        <FaCommentAlt className="icon comment" />
+                        <FaCommentAlt className="icon comment pad-0" />
                         {post.comments.length}
                       </Link>
                     </div>
                   </div>
                 ))
               ) : (
-                <p>No posts yet. Be the first to create one!</p>
+                <div class="loader"></div>
               )}
             </div>
           </div>

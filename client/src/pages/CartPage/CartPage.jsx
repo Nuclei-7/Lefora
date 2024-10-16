@@ -7,7 +7,6 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const navigate = useNavigate();
-const CartPage = () => {
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -73,6 +72,7 @@ const CartPage = () => {
   const handleInputChange = (e) => {
     setDeliveryInfo({ ...deliveryInfo, [e.target.name]: e.target.value });
   };
+
   const handleConfirmOrder = async () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length === 0) {
@@ -97,15 +97,6 @@ const CartPage = () => {
       }
     } else {
       setErrors(validationErrors);
-  const handleConfirmOrder = () => {
-    const validationErrors = validateInputs();
-    if (Object.keys(validationErrors).length === 0) {
-      // Proceed with order confirmation if no validation errors
-      console.log("Order confirmed!", cartItems, deliveryInfo);
-      setErrors({});
-    } else {
-      setErrors(validationErrors); // Set errors to display on the form
-
     }
   };
 
@@ -255,7 +246,6 @@ const CartPage = () => {
               <div className="form-group full-width">
                 <label>Dates</label>
                 <input type="date" placeholder="Select delivery date" />
-                <input type="text" placeholder="Select delivery date" />
               </div>
               <div className="form-group full-width">
                 <label>Note</label>

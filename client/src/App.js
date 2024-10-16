@@ -45,6 +45,7 @@ function App() {
             <Route path="/posts/:id" element={<PostDetails />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile/:userId" element={<Profile />} />
+            <Route path="/cart" element={<CartPage />} />
           </Routes>
         )}
       </Router>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./register.css";
+import "./register.css"; // Your custom CSS
 import Navbar from "../components/Navbar";
 
 function Register() {
@@ -29,63 +29,64 @@ function Register() {
   return (
     <>
       <Navbar />
-      <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-        <div className="bg-white p-3 rounded w-25">
-          <h2>Register</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="name">
-                <strong>Name</strong>
+      <div className="login-container">
+        <div className="login-box">
+          <h2 className="login-title">Register</h2>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="name" className="form-label">
+                Name
               </label>
               <input
                 type="text"
                 placeholder="Enter Name"
                 autoComplete="off"
-                name="name" // Updated name attribute
-                className="form-control rounded-0"
+                name="name"
+                className="form-input"
                 onChange={(e) => setName(e.target.value)}
-                required // Added required for better validation
+                required
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="email">
-                <strong>Email</strong>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Email
               </label>
               <input
-                type="email" // Changed type to email for better validation
-                placeholder="Enter email"
+                type="email"
+                placeholder="Enter Email"
                 autoComplete="off"
-                name="email" // Updated name attribute
-                className="form-control rounded-0"
+                name="email"
+                className="form-input"
                 onChange={(e) => setEmail(e.target.value)}
-                required // Added required for better validation
+                required
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="password">
-                <strong>Password</strong>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Password
               </label>
               <input
                 type="password"
                 placeholder="Enter Password"
                 autoComplete="off"
-                name="password" // Updated name attribute
-                className="form-control rounded-0"
+                name="password"
+                className="form-input"
                 onChange={(e) => setPassword(e.target.value)}
-                required // Added required for better validation
+                required
               />
             </div>
-            <button type="submit" className="btn btn-success w-100 rounded-0">
+            <button type="submit" className="login-button w-100">
               Register
             </button>
-            <p>Already have an account?</p>
           </form>
-          <Link
-            to="/login"
-            className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none"
-          >
-            Login
-          </Link>
+          <div className="register-link">
+            <p>
+              Already have an account?{" "}
+              <Link to="/login" className="link-button">
+                Login
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </>

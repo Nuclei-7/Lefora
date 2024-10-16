@@ -121,19 +121,21 @@ const Home = () => {
 
           {/* Main Content */}
           <div className="center-content">
-            <h2>Welcome to Lefora!</h2>
-            <div className="welcomeImg-box">
-              <img className="welcome-image" src={img1} alt="photo" />
-            </div>
-            <p>
-              Explore our gardening community and share your knowledge with
-              others!
-            </p>
+            <div className="welcome">
+              <h2>Welcome to Lefora!</h2>
+              <div className="welcomeImg-box">
+                <img className="welcome-image" src={img1} alt="photo" />
+              </div>
+              <p>
+                Explore our gardening community and share your knowledge with
+                others!
+              </p>
 
-            {/* Button to Open Overlay */}
-            <button onClick={() => setIsOverlayOpen(true)} className="btn">
-              Create Post
-            </button>
+              {/* Button to Open Overlay */}
+              <button onClick={() => setIsOverlayOpen(true)} className="btn">
+                Create Post
+              </button>
+            </div>
 
             {/* Overlay for Creating Post */}
             {isOverlayOpen && (
@@ -214,7 +216,7 @@ const Home = () => {
                         <img
                           key={index}
                           src={`http://localhost:3001/${image}`}
-                          alt={`Post Image ${index + 1}`}
+                          alt=""
                           className="post-image"
                         />
                       ))}

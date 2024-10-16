@@ -90,6 +90,7 @@ function Navbar() {
           </div>
         ) : (
           <>
+            <Link to="/cart">My Cart</Link>
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
           </>

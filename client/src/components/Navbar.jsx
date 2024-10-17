@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/img/profile.png";
 import "./Navbar.css";
@@ -10,6 +10,7 @@ function Navbar({ currentPage, handleNavClick }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const dropdownRef = useRef(null); // Ref to track the dropdown
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -19,6 +20,20 @@ function Navbar({ currentPage, handleNavClick }) {
       setLoggedIn(true);
       setEmail(storedEmail);
     }
+
+    // Event listener to close the dropdown if clicked outside
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false); // Close dropdown if clicked outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -36,12 +51,7 @@ function Navbar({ currentPage, handleNavClick }) {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link
-          to="/home"
-          onClick={() => {
-            handleNavClick("/home");
-          }}
-        >
+        <Link to="/home">
           <h5>LEFORA</h5>
         </Link>
       </div>
@@ -51,7 +61,6 @@ function Navbar({ currentPage, handleNavClick }) {
         <div className="search-container">
           <div className="search-bar">
             <input type="text" placeholder="Search topics..." />
-            {/* <button type="submit">Search</button> */}
           </div>
         </div>
       )}
@@ -60,9 +69,6 @@ function Navbar({ currentPage, handleNavClick }) {
         <Link
           to="/shop"
           className={`nav-link ${currentPage === "/shop" ? "active" : ""}`}
-          onClick={() => {
-            handleNavClick("/shop");
-          }}
         >
           Lefora Shop
         </Link>
@@ -73,7 +79,6 @@ function Navbar({ currentPage, handleNavClick }) {
           <Link
             to="/cart"
             className={`nav-link ${currentPage === "/cart" ? "active" : ""}`}
-            onClick={() => handleNavClick("/cart")}
           >
             My Cart
           </Link>
@@ -82,25 +87,17 @@ function Navbar({ currentPage, handleNavClick }) {
 
       <div className="auth-section">
         {loggedIn ? (
-          <div className="profile">
+          <div className="profile" ref={dropdownRef}>
             <img
               src={icon}
               alt="Profile"
               style={{ cursor: "pointer" }}
-              onClick={handleProfileClick}
+              onClick={() => setDropdownOpen((prev) => !prev)} // Toggle dropdown on click
             />
-
-            {/* Three dots (ellipsis) for the dropdown */}
-            <div
-              className="dropdown-trigger"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              &#x22EE; {/* HTML entity for vertical ellipsis (three dots) */}
-            </div>
 
             {/* Dropdown menu */}
             {dropdownOpen && (
-              <div className="dropdown-menu">
+              <div id="navDrop" className="dropdown-menu">
                 <button onClick={handleProfileClick}>Profile</button>
                 <br />
                 <button onClick={handleLogout}>Logout</button>

@@ -1,0 +1,51 @@
+.thank-you-container {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background for contrast */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.thank-you-title {
+  font-size: 2.5rem;
+  color: #4caf50; /* Green color */
+  margin-bottom: 20px;
+}
+
+.thank-you-message {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.thank-you-image {
+  width: 200px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.thank-you-note {
+  font-size: 1rem;
+  color: #555; /* Slightly darker gray for the note */
+  margin-bottom: 30px;
+}
+
+.thank-you-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50; /* Green button */
+  color: white; /* White text */
+  border: none;
+  border-radius: 5px; /* Rounded button */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover */
+}
+
+.thank-you-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+.thank-you-timer {
+  font-size: 1rem;
+  color: #555; /* Slightly darker gray for the timer */
+  margin: 20px 0;
+}

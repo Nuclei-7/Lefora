@@ -1,35 +1,15 @@
-// src/CartPage.jsx
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import Navbar from "../../components/Navbar";
 import "./CartPage.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../services/CartContext"; // Assuming CartContext holds your cart state
 
 const CartPage = ({ currentPage, handleNavClick }) => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Portable Stereo Speaker",
-      price: 250.49,
-      quantity: 1,
-      img: "https://apollobox-server-dev.s3.amazonaws.com/vendor/product/2018-09-28-05/productImages/5xi71arrey-2.jpg",
-    },
-    {
-      id: 2,
-      name: "i-Type Instant Camera",
-      price: 630.2,
-      quantity: 2,
-      img: "https://th.bing.com/th/id/OIP.Un82IDzVrqVxAYWtMJk34QAAAA?rs=1&pid=ImgDetMain",
-    },
-    {
-      id: 3,
-      name: "Positive Vibration ANC",
-      price: 330.0,
-      quantity: 1,
-      img: "https://th.bing.com/th/id/OIP.eZIHbHDgMi53SkrLuad9eAHaJs?rs=1&pid=ImgDetMain",
-    },
-  ]);
+
+  // Access cartItems from CartContext
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   const [deliveryInfo, setDeliveryInfo] = useState({
     name: "",
@@ -42,9 +22,15 @@ const CartPage = ({ currentPage, handleNavClick }) => {
   });
 
   const [slider, setSlider] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const [errors, setErrors] = useState({}); // New state for error messages
+  // Update totals when cartItems change
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
+  // Function to validate input fields before order confirmation
   const validateInputs = () => {
     let validationErrors = {};
 
@@ -69,15 +55,16 @@ const CartPage = ({ currentPage, handleNavClick }) => {
     return validationErrors;
   };
 
+  // Function to handle input changes for delivery information
   const handleInputChange = (e) => {
     setDeliveryInfo({ ...deliveryInfo, [e.target.name]: e.target.value });
   };
 
+  // Function to confirm order and save it to the database
   const handleConfirmOrder = async () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length === 0) {
       try {
-        // API call to save the order in the backend
         const response = await axios.post(
           "http://localhost:3001/api/orders/create",
           {
@@ -90,23 +77,26 @@ const CartPage = ({ currentPage, handleNavClick }) => {
         if (response.data.message === "Order saved successfully!") {
           console.log("Order confirmed and saved to the database!");
           setErrors({});
-          navigate("/home");
+          // Navigate to the Thank You page after successful order confirmation
+          navigate("/thankYou"); // Adjust this to your routing setup
         }
       } catch (err) {
         console.error("Error saving order:", err);
+        // Optional: Set error state to inform the user about the failure
       }
     } else {
       setErrors(validationErrors);
     }
   };
 
+  // Function to increment the quantity of an item in the cart
   const handleIncrement = (id) => {
     const updatedCartItems = cartItems.map((item) =>
       item.id === id ? { ...item, quantity: item.quantity + 1 } : item
     );
     setCartItems(updatedCartItems);
   };
-
+  // Function to decrement the quantity of an item in the cart
   const handleDecrement = (id) => {
     const updatedCartItems = cartItems.map((item) =>
       item.id === id && item.quantity > 1
@@ -115,11 +105,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
     );
     setCartItems(updatedCartItems);
   };
-
-  const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
 
   const handleSliderChange = () => {
     setSlider(!slider);
@@ -232,7 +217,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
                 ></span>
               </label>
             </div>
-            {/* Conditional rendering of confidential image when slider is false */}
             {!slider && (
               <div className="confidential-wrapper">
                 <img

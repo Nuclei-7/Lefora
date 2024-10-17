@@ -1,10 +1,48 @@
-import React from "react";
+// src/pages/LeforaShop.js
+import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import "./LeforaShop.css"; // Create your own styles if needed
+import { CartContext } from "../services/CartContext"; // Import Cart Context
+import "./LeforaShop.css";
+import item1 from "../assets/img/item1.jpg";
+import item2 from "../assets/img/item2.jpg";
+import item3 from "../assets/img/item3.jpg";
+import item4 from "../assets/img/item4.jpg";
 
 const LeforaShop = ({ currentPage, handleNavClick }) => {
-  console.log("handleNavClick:", handleNavClick);
+  const { addToCart } = useContext(CartContext); // Get addToCart function from context
+
+  const shopItems = [
+    {
+      id: 1,
+      name: "Utkarsh Fertiliser",
+      description: "Plant Fertilizer for Potted Plants",
+      price: 250,
+      img: item1,
+    },
+    {
+      id: 2,
+      name: "Natures+ Fertiliser",
+      description: "Humic Acid for Plant Growth",
+      price: 320,
+      img: item2,
+    },
+    {
+      id: 3,
+      name: "Gardener ToolSet",
+      description: "7 Pcs Gardening Tools Kit",
+      price: 500,
+      img: item3,
+    },
+    {
+      id: 4,
+      name: "Green Touch Two in 1",
+      description: "Garden Pan Hoe with Hedge Shear",
+      price: 600,
+      img: item4,
+    },
+  ];
+
   return (
     <>
       <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
@@ -15,103 +53,25 @@ const LeforaShop = ({ currentPage, handleNavClick }) => {
             Browse our gardening tools, seeds, and other essentials for your
             garden.
           </p>
-
-          {/* Add shop items here. You can structure this as a grid of products */}
           <div className="shop-items">
-            <div className="shop-item">
-              <div className="prod-img">
-                <img
-                  src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQNVYNtS1b1_FrT46vXIhoF_LpRECQoL16pzvAM8k0VbhGS0T9TbZmZsBremnceBXnuDZTlG3WwHde9C7uaLeNwT9TPAOor4RsoflGgb9XpSv9P1RYhX2tNMNM"
-                  alt="Item 1"
-                />
+            {shopItems.map((item) => (
+              <div key={item.id} className="shop-item">
+                <div className="prod-img">
+                  <img src={item.img} alt={item.name} />
+                </div>
+                <div className="prod-desc">
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <p>Price: Rs {item.price}</p>
+                  <button className="btn" onClick={() => addToCart(item)}>
+                    Add To Cart
+                  </button>
+                </div>
               </div>
-              <div className="prod-desc">
-                <h3>Utkarsh Fertiliser</h3>
-                <p>
-                  UTKARSH Huminoz-98 Humic Acid (98%) for Plant | Plant
-                  Fertilizer for Potted Plants | Plant Growth Enhancer, Soil
-                  Conditioner, Improves Plant Root
-                </p>
-                <button className="btn">Buy Now</button>
-              </div>
-            </div>
-
-            <div className="shop-item">
-              <div className="prod-img">
-                <img
-                  src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTvnWwZE7b0ZytmhDnk8Jr1uTO-NNR9X__hqANUcLwrRU74TbD386OmQjNuvRc6abvRQV-HQbkKcs3RBWTO8QxNJrwLz7D1maEnhtbVc2Nnrfks4SxINz7F"
-                  alt="Item 2"
-                />
-              </div>
-              <div className="prod-desc">
-                <h3>Natures+ Fertiliser</h3>
-                <p>
-                  UTKARSH Huminoz-98 Humic Acid (98%) for Plant | Plant
-                  Fertilizer for Potted Plants | Plant Growth Enhancer, Soil
-                  Conditioner, Improves Plant Root
-                </p>
-                <button className="btn">Buy Now</button>
-              </div>
-            </div>
-
-            <div className="shop-item">
-              <div className="prod-img">
-                <img
-                  src="https://m.media-amazon.com/images/I/71-4IGXtwGL.jpg"
-                  alt="Item 2"
-                />
-              </div>
-              <div className="prod-desc">
-                <h3>Gardener ToolSet</h3>
-                <p>
-                  Kraft Seeds by 10CLUB Gardening Tools Kit - 7 Pcs (Cultivator,
-                  Fork, Trowels, Weeder, Garden Gloves, Pruner Cutter) |
-                  Gardening Tools Set For Home |
-                </p>
-                <button className="btn">Buy Now</button>
-              </div>
-            </div>
-
-            <div className="shop-item">
-              <div className="prod-img">
-                <img
-                  src="https://m.media-amazon.com/images/I/51MOnNbLIqS.jpg"
-                  alt="Item 2"
-                />
-              </div>
-              <div className="prod-desc">
-                <h3>
-                  Green Touch Two in 1 Garden Pan Hoe with Indian Hedge Shear
-                </h3>
-                <p>
-                  Green Touch Two in 1 Garden Pan Hoe with Indian Hedge Shear
-                </p>
-                <button className="btn">Buy Now</button>
-              </div>
-            </div>
-
-            <div className="shop-item">
-              <div className="prod-img">
-                <img
-                  src="https://m.media-amazon.com/images/I/51MOnNbLIqS.jpg"
-                  alt="Item 2"
-                />
-              </div>
-              <div className="prod-desc">
-                <h3>Pots</h3>
-                <p>
-                  Green Live 25 Inch Rectangular Planter Pot Brown,
-                  Indoor/Outdoor Plastic Flower Pot,, Perfect for Garden,
-                  Balcony, Flower Pot and Home
-                </p>
-                <button className="btn">Buy Now</button>
-              </div>
-            </div>
-
-            {/* Add more items as needed */}
+            ))}
           </div>
         </div>
-        <Footer /> {/* Include Footer */}
+        <Footer />
       </div>
     </>
   );

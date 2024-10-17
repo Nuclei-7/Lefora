@@ -11,6 +11,8 @@ import PostDetails from "./components/PostDetails";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { AuthProvider } from "./services/AuthContext";
 import CartPage from "./pages/CartPage/CartPage";
+import { CartProvider } from "./services/CartContext";
+import ThankYouPage from "./pages/ThankYouPage";
 
 function App() {
   const [data, setData] = useState(null);
@@ -38,86 +40,89 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-          <Route
-            path="/home"
-            element={
-              <Home
-                data={data}
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-          <Route
-            path="/cart"
-            element={
-              <CartPage
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <Login
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-          <Route
-            path="/shop"
-            element={
-              <LeforaShop
-                currentPage={currentPage}
-                handleNavClick={(page) => {
-                  console.log("App's handleNavClick:", page);
-                  handleNavClick(page);
-                }}
-              />
-            }
-          />
-          <Route
-            path="/posts/:id"
-            element={
-              <PostDetails
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Register
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-          <Route
-            path="/profile/:userId"
-            element={
-              <Profile
-                currentPage={currentPage}
-                handleNavClick={handleNavClick}
-              />
-            }
-          />
-        </Routes>
-      </Router>
+      <CartProvider>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <LandingPage
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <Home
+                  data={data}
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <Login
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <CartPage
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route
+              path="/shop"
+              element={
+                <LeforaShop
+                  currentPage={currentPage}
+                  handleNavClick={(page) => {
+                    console.log("App's handleNavClick:", page);
+                    handleNavClick(page);
+                  }}
+                />
+              }
+            />
+            <Route
+              path="/posts/:id"
+              element={
+                <PostDetails
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Register
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route
+              path="/profile/:userId"
+              element={
+                <Profile
+                  currentPage={currentPage}
+                  handleNavClick={handleNavClick}
+                />
+              }
+            />
+            <Route path="/thankYou" element={<ThankYouPage />} />
+          </Routes>
+        </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }

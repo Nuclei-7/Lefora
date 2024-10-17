@@ -5,7 +5,7 @@ import "./PostDetails.css";
 import Navbar from "./Navbar";
 import { useAuth } from "../services/AuthContext"; // Adjust path as needed
 
-export default function PostDetails() {
+export default function PostDetails({ currentPage, handleNavClick }) {
   const { id } = useParams();
   const { currentUser } = useAuth(); // Get current user from AuthContext
   const [post, setPost] = useState(null);
@@ -109,7 +109,7 @@ export default function PostDetails() {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
       <div className="post-details-container">
         <div className="post-card">
           <h2 className="post-title">{post.title}</h2>

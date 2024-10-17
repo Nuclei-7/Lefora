@@ -4,7 +4,7 @@ import icon from "../assets/img/profile.png";
 import "./Navbar.css";
 import logo from "../assets/img/lefora.jpeg";
 
-function Navbar() {
+function Navbar({ currentPage, handleNavClick }) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -36,7 +36,12 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/home">
+        <Link
+          to="/home"
+          onClick={() => {
+            handleNavClick("/home");
+          }}
+        >
           <h5>LEFORA</h5>
         </Link>
       </div>
@@ -52,12 +57,26 @@ function Navbar() {
       )}
 
       <div className="shop-link">
-        <Link to="/shop">Lefora Shop</Link>
+        <Link
+          to="/shop"
+          className={`nav-link ${currentPage === "/shop" ? "active" : ""}`}
+          onClick={() => {
+            handleNavClick("/shop");
+          }}
+        >
+          Lefora Shop
+        </Link>
       </div>
 
       {loggedIn && (
         <div className="shop-cart">
-          <Link to="/cart">My Cart</Link>
+          <Link
+            to="/cart"
+            className={`nav-link ${currentPage === "/cart" ? "active" : ""}`}
+            onClick={() => handleNavClick("/cart")}
+          >
+            My Cart
+          </Link>
         </div>
       )}
 

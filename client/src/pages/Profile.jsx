@@ -4,7 +4,7 @@ import axios from "axios";
 import "./profile.css";
 import Navbar from "../components/Navbar";
 
-function Profile() {
+function Profile({ currentPage, handleNavClick }) {
   const { userId } = useParams(); // Gets the user ID from the URL
   const [user, setUser] = useState({ name: "", email: "" }); // State to store user data
   const [editing, setEditing] = useState(false); // State to track editing mode
@@ -86,7 +86,7 @@ function Profile() {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
       <div className="profile-container">
         <div className="profile-card">
           <h1>Profile</h1>

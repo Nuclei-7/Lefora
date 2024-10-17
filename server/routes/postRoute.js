@@ -1,3 +1,4 @@
+//postRoute
 const express = require("express");
 const multer = require("multer");
 const router = express.Router();
@@ -78,18 +79,37 @@ router.post("/:id/comments", async (req, res) => {
 });
 
 // Like a post
-router.post("/:id/like", async (req, res) => {
+router.post("/:id/toggle-like", async (req, res) => {
+  const { userId } = req.body; // Get user ID from request body
+
   try {
     const post = await Post.findById(req.params.id); // Find post by ID
+
     if (!post) {
       return res.status(404).json({ message: "Post not found" }); // Return 404 if post not found
     }
-    post.likes += 1; // Increment likes count
-    await post.save();
-    res.status(200).json({ message: "Post liked", post });
+
+    // Check if the user has already liked the post
+    const hasLiked = post.likedBy.includes(userId);
+
+    if (hasLiked) {
+      // Unlike: remove user from likedBy array and decrement like count
+      post.likedBy = post.likedBy.filter((id) => id !== userId);
+      post.likes -= 1;
+    } else {
+      // Like: add user to likedBy array and increment like count
+      post.likedBy.push(userId);
+      post.likes += 1;
+    }
+
+    await post.save(); // Save the updated post
+
+    res
+      .status(200)
+      .json({ message: hasLiked ? "Post unliked" : "Post liked", post });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to like post" });
+    res.status(500).json({ message: "Failed to toggle like" });
   }
 });
 

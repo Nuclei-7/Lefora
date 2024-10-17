@@ -1,26 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./PostDetails.css";
 import Navbar from "./Navbar";
 import { useAuth } from "../services/AuthContext"; // Adjust path as needed
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"; // Import heart icons
 
 export default function PostDetails({ currentPage, handleNavClick }) {
   const { id } = useParams();
   const { currentUser } = useAuth(); // Get current user from AuthContext
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
-
+  const [showDropdown, setShowDropdown] = useState(false); // Dropdown visibility state
+  const [hasLiked, setHasLiked] = useState(false); // State to track if the user has liked the post
+  const dropdownRef = useRef(null); // Reference to the dropdown element
   const navigate = useNavigate();
 
+  // Fetch post data
   useEffect(() => {
     const fetchPost = async () => {
-      console.log("Current User in PostDetails:", currentUser);
-      console.log("Fetching post with ID:", id);
       try {
         const res = await axios.get(`http://localhost:3001/api/posts/${id}`);
-        console.log("Post data fetched:", res.data);
         setPost(res.data);
+        if (currentUser) {
+          // Check if the current user has already liked the post
+          setHasLiked(res.data.likedBy.includes(currentUser.id));
+        }
       } catch (err) {
         console.error("Error fetching post:", err);
       }
@@ -28,9 +33,9 @@ export default function PostDetails({ currentPage, handleNavClick }) {
     fetchPost();
   }, [id, currentUser]);
 
+  // Handle adding a comment
   const handleAddComment = async (e) => {
     e.preventDefault();
-    console.log("Adding comment:", comment);
     try {
       const res = await axios.post(
         `http://localhost:3001/api/posts/${id}/comments`,
@@ -39,22 +44,25 @@ export default function PostDetails({ currentPage, handleNavClick }) {
           text: comment,
         }
       );
-      console.log("Comment added successfully:", res.data);
-      setPost(res.data.post);
-      setComment("");
+      setPost(res.data.post); // Update the post data after adding the comment
+      setComment(""); // Clear the comment input field
     } catch (err) {
       console.error("Error adding comment:", err);
     }
   };
 
+  // Handle deleting the post
   const deletePost = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (!confirmDelete) return; // Exit if the user cancels
+
     try {
-      const res = await axios.delete(`http://localhost:3001/api/posts/${id}`);
-      console.log(res.data.message); // Log success message
+      await axios.delete(`http://localhost:3001/api/posts/${id}`);
       navigate("/home");
       alert("Post deleted successfully!"); // Notify the user
     } catch (error) {
-      console.error("Error deleting post:", error);
       alert(
         error.response?.data?.message ||
           "Failed to delete post. Please try again."
@@ -62,22 +70,43 @@ export default function PostDetails({ currentPage, handleNavClick }) {
     }
   };
 
+  // Handle liking and unliking the post
   const handleLikePost = async () => {
+    if (!currentUser) return; // Ensure user is logged in
+
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/posts/${id}/like`,
-        {
-          userId: currentUser ? currentUser.id : null,
-        }
+        `http://localhost:3001/api/posts/${id}/toggle-like`,
+        { userId: currentUser.id }
       );
-      console.log("Post liked successfully:", res.data);
-      setPost(res.data.post);
+      setPost(res.data.post); // Update the post data after liking/unliking
+      setHasLiked(res.data.post.likedBy.includes(currentUser.id)); // Update like status
     } catch (err) {
-      console.error("Error liking post:", err);
+      console.error("Error toggling like:", err);
     }
   };
 
-  if (!post) return <div>Loading...</div>;
+  // Toggle dropdown menu
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev); // Toggle dropdown visibility
+  };
+
+  // Close dropdown if clicking outside
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown(false); // Close the dropdown
+    }
+  };
+
+  // Add event listener to handle click outside
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  if (!post) return <div>Loading...</div>; // Show loading message while fetching data
 
   return (
     <>
@@ -85,17 +114,27 @@ export default function PostDetails({ currentPage, handleNavClick }) {
       <div className="post-details-container">
         <div className="post-card">
           <h2 className="post-title">{post.title}</h2>
-          <p className="post-content">{post.content}</p>
 
-          {/* Only show the delete button if the current user is the author */}
+          {/* Dropdown for post actions (delete) */}
           {currentUser && currentUser.username === post.author && (
-            <button onClick={deletePost} className="delete-button">
-              Delete Post
-            </button>
+            <div className="dropdown" ref={dropdownRef}>
+              <button onClick={toggleDropdown} className="dropdown-btn">
+                ⋮
+              </button>
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <button onClick={deletePost} className="delete-option">
+                    Delete Post
+                  </button>
+                </div>
+              )}
+            </div>
           )}
 
+          <p className="post-content">{post.content}</p>
           <p className="post-author">Posted by: {post.author}</p>
 
+          {/* Render post images */}
           {post.images && post.images.length > 0 && (
             <div className="post-images">
               {post.images.map((image, index) => (
@@ -109,6 +148,7 @@ export default function PostDetails({ currentPage, handleNavClick }) {
             </div>
           )}
 
+          {/* Like button and count */}
           <p className="post-likes">
             Likes: {post.likes}
             <button
@@ -116,11 +156,16 @@ export default function PostDetails({ currentPage, handleNavClick }) {
               onClick={handleLikePost}
               aria-label="Like Post"
             >
-              ❤️
+              {hasLiked ? (
+                <AiFillHeart color="red" size={24} /> // Filled heart when liked
+              ) : (
+                <AiOutlineHeart color="black" size={24} /> // Empty heart when not liked
+              )}
             </button>
           </p>
         </div>
 
+        {/* Comments section */}
         <div className="comments-section">
           <h3 className="comments-title">Comments</h3>
           {post.comments.length > 0 ? (
@@ -137,9 +182,10 @@ export default function PostDetails({ currentPage, handleNavClick }) {
             <p>No comments yet.</p>
           )}
 
+          {/* Add comment form */}
           <form className="comment-form" onSubmit={handleAddComment}>
             <p className="current-user">
-              Logged in as: {currentUser ? currentUser.username : "Anonymous"}
+              Logged in as: {currentUser?.username || "Anonymous"}
             </p>
             <textarea
               value={comment}

@@ -8,6 +8,7 @@ const postSchema = new Schema(
     author: { type: String, required: true },
     images: [{ type: String }], // No need for required: false; it's optional by default
     likes: { type: Number, default: 0 },
+    likedBy: { type: [String], default: [] },
     comments: [
       {
         author: { type: String, required: true }, // Optional: Set author as required

@@ -3,7 +3,7 @@ import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import "./CartPage.css";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = ({ currentPage, handleNavClick }) => {
   const navigate = useNavigate();

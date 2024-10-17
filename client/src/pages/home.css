@@ -516,3 +516,6 @@ a {
   margin: 20px 0; /* Add vertical space around the hr */
   opacity: 10%;
 }
+.heart.liked {
+  color: red; /* Change this to the desired color for the liked state */
+}

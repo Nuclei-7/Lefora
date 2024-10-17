@@ -241,3 +241,36 @@
     height: 35px; /* Reduced height */
   }
 }
+
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  padding: 5px;
+  position: relative;
+  color: black; /* Default color */
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -21px;
+  width: 0; /* Start with no underline */
+  height: 2px;
+  background-color: transparent;
+  transition: width 0.3s ease;
+}
+
+.nav-link.active {
+  color: green; /* Set active link text color */
+}
+
+.nav-link.active::after {
+  width: 100%; /* Full-width underline for active links */
+  background-color: green; /* Green underline */
+}
+
+.nav-link:hover::after {
+  width: 100%; /* Show underline on hover */
+  background-color: green; /* Green underline on hover */
+}

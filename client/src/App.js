@@ -15,6 +15,13 @@ import CartPage from "./pages/CartPage/CartPage";
 function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true); // Track loading state
+  const [currentPage, setCurrentPage] = useState("/"); // Set default or current page
+
+  // Function to handle setting the current page
+  const handleNavClick = (page) => {
+    console.log("Navigating to:", page);
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     axios
@@ -32,22 +39,84 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        {loading ? ( // Display loading state if fetching data
-          <div>Loading...</div>
-        ) : (
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home data={data} />} />{" "}
-            {/* Pass data if needed */}
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/shop" element={<LeforaShop />} />
-            <Route path="/posts/:id" element={<PostDetails />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile/:userId" element={<Profile />} />
-            <Route path="/cart" element={<CartPage />} />
-          </Routes>
-        )}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <LandingPage
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <Home
+                data={data}
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <CartPage
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Login
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <LeforaShop
+                currentPage={currentPage}
+                handleNavClick={(page) => {
+                  console.log("App's handleNavClick:", page);
+                  handleNavClick(page);
+                }}
+              />
+            }
+          />
+          <Route
+            path="/posts/:id"
+            element={
+              <PostDetails
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Register
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+          <Route
+            path="/profile/:userId"
+            element={
+              <Profile
+                currentPage={currentPage}
+                handleNavClick={handleNavClick}
+              />
+            }
+          />
+        </Routes>
       </Router>
     </AuthProvider>
   );

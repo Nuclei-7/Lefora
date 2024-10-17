@@ -4,7 +4,7 @@ import axios from "axios";
 import "./register.css"; // Your custom CSS
 import Navbar from "../components/Navbar";
 
-function Register() {
+function Register({ currentPage, handleNavClick }) {
   const [userName, setName] = useState(""); // Set default to empty string
   const [email, setEmail] = useState(""); // Set default to empty string
   const [password, setPassword] = useState(""); // Set default to empty string
@@ -28,7 +28,7 @@ function Register() {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
       <div className="login-container">
         <div className="login-box">
           <h2 className="login-title">Register</h2>

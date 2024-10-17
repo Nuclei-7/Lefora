@@ -1,28 +1,36 @@
 /* leforaShop.css */
 .lefora-shop-container {
-    padding: 20px;
-  }
-  
-  .shop-content {
-    text-align: center;
-  }
-  
-  .shop-items {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
-  
-  .shop-item {
-    width: 200px;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
-  
-  .shop-item img {
-    width: 100%;
-    height: auto;
-  }
-  
+  padding: 20px;
+}
+
+.shop-content {
+  text-align: center;
+}
+
+.shop-items {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.shop-item {
+  display: flex;
+  width: 200px;
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.shop-item img {
+  width: 100%;
+  height: auto;
+}
+
+.prod-desc {
+  display: flex;
+  flex-direction: column;
+}

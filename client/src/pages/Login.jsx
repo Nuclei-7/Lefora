@@ -5,7 +5,7 @@ import "./login.css"; // Assuming your CSS file is properly set
 import Navbar from "../components/Navbar";
 import { useAuth } from "../services/AuthContext"; // Adjust the path as necessary
 
-function Login() {
+function Login({ currentPage, handleNavClick }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ function Login() {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
       <div className="login-container">
         <div className="login-box">
           <h2 className="login-title">Login</h2>

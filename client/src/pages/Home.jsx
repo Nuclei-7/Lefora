@@ -8,7 +8,7 @@ import "./home.css";
 import img1 from "../assets/img/p1.svg";
 import { useAuth } from "../services/AuthContext"; // Import AuthContext
 
-const Home = () => {
+const Home = ({ currentPage, handleNavClick }) => {
   const [posts, setPosts] = useState([]);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay state
   const { currentUser } = useAuth(); // Get the current user from AuthContext
@@ -97,7 +97,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
       <div className="home-container">
         <div className="main-content">
           {/* Left Sidebar */}
@@ -122,6 +122,27 @@ const Home = () => {
             <div className="discussing-now">
               <h3>Discussing Now</h3>
               {posts.length > 0 ? (
+                [...posts] // Create a shallow copy of posts
+                  .sort((a, b) => b.comments.length - a.comments.length) // Sort the copy by comments length
+                  .slice(0, 3) // Take the top 3 posts
+                  .map((post, index) => (
+                    <div key={post._id} className="disc">
+                      <Link to={`/posts/${post._id}`}>
+                        <h4>{post.title}</h4>
+                      </Link>
+                      <p className="comment-length">
+                        <FaCommentAlt className="icon pad-0" />{" "}
+                        {post.comments.length} answers
+                      </p>
+                      {index < 2 && <hr className="gray-hr" />}{" "}
+                      {/* Render <hr> only for the first two posts */}
+                    </div>
+                  ))
+              ) : (
+                <div className="loader"></div>
+              )}
+
+              {/* {posts.length > 0 ? (
                 posts.slice(0, 3).map((post, index) => (
                   <div key={post._id} className="disc">
                     <Link to={`/posts/${post._id}`}>
@@ -132,12 +153,11 @@ const Home = () => {
                       {post.comments.length} answers
                     </p>
                     {index < 2 && <hr className="gray-hr" />}{" "}
-                    {/* Render <hr> only for the first two posts */}
                   </div>
                 ))
               ) : (
                 <div className="loader"></div>
-              )}
+              )} */}
             </div>
           </div>
 

@@ -5,7 +5,7 @@ import "./CartPage.css";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const CartPage = () => {
+const CartPage = ({ currentPage, handleNavClick }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([
     {
@@ -127,7 +127,7 @@ const CartPage = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
       <div className="cart-page">
         <div className="left-section">
           <div>

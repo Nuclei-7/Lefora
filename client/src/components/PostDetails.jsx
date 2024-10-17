@@ -4,6 +4,7 @@ import axios from "axios";
 import "./PostDetails.css";
 import Navbar from "./Navbar";
 import { useAuth } from "../services/AuthContext"; // Adjust path as needed
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"; // Import heart icons
 
 export default function PostDetails({ currentPage, handleNavClick }) {
   const { id } = useParams();
@@ -69,19 +70,19 @@ export default function PostDetails({ currentPage, handleNavClick }) {
     }
   };
 
-  // Handle liking the post
+  // Handle liking and unliking the post
   const handleLikePost = async () => {
     if (!currentUser) return; // Ensure user is logged in
 
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/posts/${id}/like`,
+        `http://localhost:3001/api/posts/${id}/toggle-like`,
         { userId: currentUser.id }
       );
-      setPost(res.data.post); // Update the post data after liking
-      setHasLiked(true); // Mark as liked
+      setPost(res.data.post); // Update the post data after liking/unliking
+      setHasLiked(res.data.post.likedBy.includes(currentUser.id)); // Update like status
     } catch (err) {
-      console.error("Error liking post:", err);
+      console.error("Error toggling like:", err);
     }
   };
 
@@ -153,10 +154,13 @@ export default function PostDetails({ currentPage, handleNavClick }) {
             <button
               className="like-button"
               onClick={handleLikePost}
-              disabled={hasLiked} // Disable button if already liked
               aria-label="Like Post"
             >
-              {hasLiked ? "❤️" : "🖤"} {/* Change heart icon based on like status */}
+              {hasLiked ? (
+                <AiFillHeart color="red" size={24} /> // Filled heart when liked
+              ) : (
+                <AiOutlineHeart color="black" size={24} /> // Empty heart when not liked
+              )}
             </button>
           </p>
         </div>

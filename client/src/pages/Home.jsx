@@ -1,3 +1,4 @@
+//home
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Import Link for routing
 import Navbar from "../components/Navbar";
@@ -8,7 +9,7 @@ import "./home.css";
 import img1 from "../assets/img/p1.svg";
 import { useAuth } from "../services/AuthContext"; // Import AuthContext
 
-const Home = ({ currentPage, handleNavClick }) => {
+const Home = () => {
   const [posts, setPosts] = useState([]);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Overlay state
   const { currentUser } = useAuth(); // Get the current user from AuthContext
@@ -36,8 +37,15 @@ const Home = ({ currentPage, handleNavClick }) => {
 
   // Handle like button
   const handleLikePost = (postId) => {
+    const userId = currentUser ? currentUser.id : null; // Get user ID from AuthContext
+
+    if (!userId) {
+      alert("Please log in to like a post."); // Alert if user is not logged in
+      return;
+    }
+
     axios
-      .post(`http://localhost:3001/api/posts/${postId}/like`)
+      .post(`http://localhost:3001/api/posts/${postId}/toggle-like`, { userId })
       .then((res) => {
         const updatedPosts = posts.map((post) =>
           post._id === postId ? res.data.post : post
@@ -97,7 +105,7 @@ const Home = ({ currentPage, handleNavClick }) => {
 
   return (
     <>
-      <Navbar currentPage={currentPage} handleNavClick={handleNavClick} />
+      <Navbar />
       <div className="home-container">
         <div className="main-content">
           {/* Left Sidebar */}
@@ -122,27 +130,6 @@ const Home = ({ currentPage, handleNavClick }) => {
             <div className="discussing-now">
               <h3>Discussing Now</h3>
               {posts.length > 0 ? (
-                [...posts] // Create a shallow copy of posts
-                  .sort((a, b) => b.comments.length - a.comments.length) // Sort the copy by comments length
-                  .slice(0, 3) // Take the top 3 posts
-                  .map((post, index) => (
-                    <div key={post._id} className="disc">
-                      <Link to={`/posts/${post._id}`}>
-                        <h4>{post.title}</h4>
-                      </Link>
-                      <p className="comment-length">
-                        <FaCommentAlt className="icon pad-0" />{" "}
-                        {post.comments.length} answers
-                      </p>
-                      {index < 2 && <hr className="gray-hr" />}{" "}
-                      {/* Render <hr> only for the first two posts */}
-                    </div>
-                  ))
-              ) : (
-                <div className="loader"></div>
-              )}
-
-              {/* {posts.length > 0 ? (
                 posts.slice(0, 3).map((post, index) => (
                   <div key={post._id} className="disc">
                     <Link to={`/posts/${post._id}`}>
@@ -153,11 +140,12 @@ const Home = ({ currentPage, handleNavClick }) => {
                       {post.comments.length} answers
                     </p>
                     {index < 2 && <hr className="gray-hr" />}{" "}
+                    {/* Render <hr> only for the first two posts */}
                   </div>
                 ))
               ) : (
                 <div className="loader"></div>
-              )} */}
+              )}
             </div>
           </div>
 
@@ -252,15 +240,18 @@ const Home = ({ currentPage, handleNavClick }) => {
                     <p>{post.content}</p>
                     <p className="author">Posted by: {post.author}</p>
 
-                    {/* Display Images */}
+                    {/* Display Images in Boxes */}
                     <div className="post-images">
                       {post.images.map((image, index) => (
-                        <img
-                          key={index}
-                          src={`http://localhost:3001/${image}`}
-                          alt=""
-                          className="post-image"
-                        />
+                        <div key={index} className="image-box">
+                          {" "}
+                          {/* Added a div for image box */}
+                          <img
+                            src={`http://localhost:3001/${image}`}
+                            alt=""
+                            className="post-image"
+                          />
+                        </div>
                       ))}
                     </div>
 
@@ -269,7 +260,13 @@ const Home = ({ currentPage, handleNavClick }) => {
                         className="like-btn"
                         onClick={() => handleLikePost(post._id)}
                       >
-                        <FaHeart className="icon heart" />
+                        <FaHeart
+                          className={`icon heart ${
+                            post.likedBy.includes(currentUser?.id)
+                              ? "liked"
+                              : ""
+                          }`}
+                        />
                         {post.likes}
                       </button>
                       <Link to={`/posts/${post._id}`} className="comment-btn">
@@ -280,7 +277,7 @@ const Home = ({ currentPage, handleNavClick }) => {
                   </div>
                 ))
               ) : (
-                <div class="loader"></div>
+                <p>No posts available.</p>
               )}
             </div>
           </div>

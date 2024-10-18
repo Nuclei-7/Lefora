@@ -1,14 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import Navbar from "../../components/Navbar";
 import "./CartPage.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../../services/CartContext"; // Assuming CartContext holds your cart state
-
+import { CartContext } from "../../services/CartContext";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"; // Import PayPal
+const paypalID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const CartPage = ({ currentPage, handleNavClick }) => {
   const navigate = useNavigate();
-
-  // Access cartItems from CartContext
   const { cartItems, setCartItems } = useContext(CartContext);
 
   const [deliveryInfo, setDeliveryInfo] = useState({
@@ -19,84 +18,109 @@ const CartPage = ({ currentPage, handleNavClick }) => {
     state: "",
     zip: "",
     address: "",
+    scheduleDate: "", // Add schedule date field
   });
 
   const [slider, setSlider] = useState(false);
   const [errors, setErrors] = useState({});
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [showPayPal, setShowPayPal] = useState(false); // State for showing PayPal button
 
-  // Update totals when cartItems change
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
 
-  // Function to validate input fields before order confirmation
+  // Handle payment option selection
+  const handlePaymentChange = (e) => {
+    const selectedPaymentMethod = e.target.value;
+    setPaymentMethod(selectedPaymentMethod);
+  };
+
+  // Validation logic remains the same
   const validateInputs = () => {
     let validationErrors = {};
-
     if (!deliveryInfo.name) validationErrors.name = "Name is required";
     if (!deliveryInfo.mobile)
       validationErrors.mobile = "Mobile number is required";
     else if (!/^[0-9]{10}$/.test(deliveryInfo.mobile))
       validationErrors.mobile = "Invalid mobile number";
-
     if (!deliveryInfo.email) validationErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(deliveryInfo.email))
       validationErrors.email = "Invalid email address";
-
     if (!deliveryInfo.city) validationErrors.city = "City is required";
     if (!deliveryInfo.state) validationErrors.state = "State is required";
     if (!deliveryInfo.zip) validationErrors.zip = "ZIP code is required";
     else if (!/^[0-9]{5,6}$/.test(deliveryInfo.zip))
       validationErrors.zip = "Invalid ZIP code";
-
     if (!deliveryInfo.address) validationErrors.address = "Address is required";
+    if (!deliveryInfo.scheduleDate)
+      validationErrors.scheduleDate = "Schedule date is required"; // Add validation for schedule date
 
     return validationErrors;
   };
 
-  // Function to handle input changes for delivery information
   const handleInputChange = (e) => {
     setDeliveryInfo({ ...deliveryInfo, [e.target.name]: e.target.value });
   };
 
-  // Function to confirm order and save it to the database
-  const handleConfirmOrder = async () => {
+  // Handle PayPal payment success
+  const handleApprove = async (orderID) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/orders/create",
+        {
+          cartItems,
+          deliveryInfo,
+          totalPrice,
+          paymentMethod: "PayPal",
+          orderID,
+        }
+      );
+
+      if (response.data.message === "Order saved successfully!") {
+        setErrors({});
+        navigate("/thankYou");
+      }
+    } catch (err) {
+      console.error("Error saving order:", err);
+    }
+  };
+
+  const handleConfirmOrder = () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length === 0) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3001/api/orders/create",
-          {
+      if (paymentMethod === "online") {
+        // Show PayPal for online payments when confirming the order
+        setShowPayPal(true);
+      } else {
+        // Handle COD and POS order confirmations
+        try {
+          axios.post("http://localhost:3001/api/orders/create", {
             cartItems,
             deliveryInfo,
             totalPrice,
-          }
-        );
-
-        if (response.data.message === "Order saved successfully!") {
-          console.log("Order confirmed and saved to the database!");
-          setErrors({});
-          // Navigate to the Thank You page after successful order confirmation
-          navigate("/thankYou"); // Adjust this to your routing setup
+            scheduleDate: deliveryInfo.scheduleDate, // Include scheduleDate
+            paymentMethod: paymentMethod === "cod" ? "COD" : "POS",
+          });
+          navigate("/thankYou");
+        } catch (err) {
+          console.error("Error saving order:", err);
         }
-      } catch (err) {
-        console.error("Error saving order:", err);
-        // Optional: Set error state to inform the user about the failure
       }
     } else {
       setErrors(validationErrors);
     }
   };
 
-  // Function to increment the quantity of an item in the cart
+  // Increment and decrement functions
   const handleIncrement = (id) => {
     const updatedCartItems = cartItems.map((item) =>
       item.id === id ? { ...item, quantity: item.quantity + 1 } : item
     );
     setCartItems(updatedCartItems);
   };
-  // Function to decrement the quantity of an item in the cart
+
   const handleDecrement = (id) => {
     const updatedCartItems = cartItems.map((item) =>
       item.id === id && item.quantity > 1
@@ -104,10 +128,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
         : item
     );
     setCartItems(updatedCartItems);
-  };
-
-  const handleSliderChange = () => {
-    setSlider(!slider);
   };
 
   return (
@@ -119,6 +139,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
             <h2>Delivery Information</h2>
             <div className="delivery-info">
               <form>
+                {/* Form fields for delivery information */}
                 <div className="form-row">
                   <div className="form-group">
                     <label>Name</label>
@@ -202,111 +223,117 @@ const CartPage = ({ currentPage, handleNavClick }) => {
                   />
                   {errors.address && <p className="error">{errors.address}</p>}
                 </div>
+                <div className="form-group full-width">
+                  <label>Schedule Date</label>
+                  <input
+                    type="date"
+                    name="scheduleDate"
+                    value={deliveryInfo.scheduleDate}
+                    onChange={handleInputChange}
+                  />
+                  {errors.scheduleDate && (
+                    <p className="error">{errors.scheduleDate}</p>
+                  )}
+                </div>
               </form>
             </div>
           </div>
 
-          <div className="schedule-container">
-            <div className="toggle">
-              <h2>Schedule Delivery</h2>
-              <label className="switch">
-                <input type="checkbox" />
-                <span
-                  onClick={() => handleSliderChange()}
-                  className="slider round"
-                ></span>
-              </label>
-            </div>
-            {!slider && (
-              <div className="confidential-wrapper">
-                <img
-                  className="confidential"
-                  src="https://static.vecteezy.com/system/resources/previews/021/433/001/original/confidential-rubber-stamp-free-png.png"
-                  alt="Confidential"
-                />
-              </div>
-            )}
-            <div className="schedule-delivery">
-              <div className="form-group full-width">
-                <label>Dates</label>
-                <input type="date" placeholder="Select delivery date" />
-              </div>
-              <div className="form-group full-width">
-                <label>Note</label>
-                <textarea placeholder="Type your note"></textarea>
-              </div>
-            </div>
-          </div>
-
+          {/* Payment Method Section */}
           <div>
             <h2>Payment Method</h2>
             <div className="payment-method">
               <div className="payment-options">
                 <label>
-                  <input type="radio" name="payment" value="online" />
-                  Online Payment
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="online"
+                    onChange={handlePaymentChange}
+                  />
+                  Online Payment (PayPal)
                 </label>
                 <label>
-                  <input type="radio" name="payment" value="cod" />
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="cod"
+                    onChange={handlePaymentChange}
+                  />
                   Cash on Delivery
                 </label>
                 <label>
-                  <input type="radio" name="payment" value="pos" />
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="pos"
+                    onChange={handlePaymentChange}
+                  />
                   POS on Delivery
                 </label>
               </div>
             </div>
           </div>
+
+          {/* Render PayPal Button only if confirmed */}
+          {showPayPal && paymentMethod === "online" && (
+            <PayPalScriptProvider
+              options={{
+                "client-id":
+                  "AeYhfs76JnTAGRATRI1bHoRPx4IbUCNiSj_e9pm54PYDpnjHgsS2BjJ2aOIV04AjUZLY0Kc3e6k9sfU7",
+                currency: "USD",
+              }}
+            >
+              <PayPalButtons
+                style={{ layout: "vertical" }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          value: totalPrice.toFixed(2),
+                        },
+                      },
+                    ],
+                  });
+                }}
+                onApprove={(data, actions) => {
+                  return actions.order.capture().then((details) => {
+                    handleApprove(data.orderID);
+                  });
+                }}
+              />
+            </PayPalScriptProvider>
+          )}
         </div>
-        <div className="right-section">
+
+        {/* Order Summary Section */}
+        <div className="right-section-container">
           <h2>Order Summary</h2>
-          <div className="order-summary">
-            <div className="cart-products">
-              <div className="cart-items">
-                {cartItems.map((item) => (
-                  <div className="cart-item" key={item.id}>
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      className="product-image"
-                    />
-                    <div className="item-details">
-                      <p>{item.name}</p>
-                      <p>Rs {item.price.toFixed(2)}</p>
-                    </div>
-                    <div className="item-quantity">
-                      <button onClick={() => handleDecrement(item.id)}>
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => handleIncrement(item.id)}>
-                        +
-                      </button>
-                    </div>
-                  </div>
-                ))}
+          <div className="cart-items">
+            {cartItems.map((item) => (
+              <div key={item.id} className="cart-item">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="cart-item-image"
+                />
+                <span>{item.name}</span>
+                <span>
+                  <button onClick={() => handleDecrement(item.id)}>-</button>
+                  {item.quantity}
+                  <button onClick={() => handleIncrement(item.id)}>+</button>
+                </span>
+                <span>${(item.price * item.quantity).toFixed(2)}</span>
               </div>
-            </div>
-            <div className="cart-billing">
-              <div className="summary-totals">
-                <div className="subtotal">
-                  <p style={{ color: "gray" }}>Subtotal: </p>
-                  <p>Rs {totalPrice.toFixed(2)}</p>
-                </div>
-                <div className="shipping">
-                  <p style={{ color: "gray" }}>Shipping: </p>
-                  <p>Free</p>
-                </div>
-                <div className="total">
-                  <h3>Total: </h3>
-                  <h3>Rs {totalPrice.toFixed(2)}</h3>
-                </div>
-              </div>
-              <button className="checkout-btn" onClick={handleConfirmOrder}>
-                Confirm Order
-              </button>
-            </div>
+            ))}
           </div>
+          <div className="total-price">
+            <h3>Total: ${totalPrice.toFixed(2)}</h3>
+          </div>
+          <button className="checkout-btn" onClick={handleConfirmOrder}>
+            Proceed To Pay
+          </button>
         </div>
       </div>
     </>

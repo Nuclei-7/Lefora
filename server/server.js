@@ -66,6 +66,23 @@ app.post("/upload-multiple", upload.array("images", 5), (req, res) => {
     res.status(500).json({ message: "Failed to upload files" });
   }
 });
+// execute bash file
+app.post("/send-email", (req, res) => {
+  const { message } = req.body; // Get message from the request body
+
+  exec(`bash email.sh "${message}"`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error.message}`);
+      return res.status(500).send("Error executing script");
+    }
+    if (stderr) {
+      console.error(`Script stderr: ${stderr}`);
+      return res.status(500).send("Error in script");
+    }
+    console.log(`Script stdout: ${stdout}`);
+    res.send("Email sent successfully!");
+  });
+});
 
 // Define a sample route to test the server
 app.get("/", (req, res) => {

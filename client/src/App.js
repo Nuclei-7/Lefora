@@ -13,6 +13,8 @@ import { AuthProvider } from "./services/AuthContext";
 import CartPage from "./pages/CartPage/CartPage";
 import { CartProvider } from "./services/CartContext";
 import ThankYouPage from "./pages/ThankYouPage";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   const [data, setData] = useState(null);
@@ -120,6 +122,8 @@ function App() {
               }
             />
             <Route path="/thankYou" element={<ThankYouPage />} />
+            <Route path="/aboutUs" element={<AboutUs />} />
+            <Route path="/contactUs" element={<ContactUs />} />
           </Routes>
         </Router>
       </CartProvider>

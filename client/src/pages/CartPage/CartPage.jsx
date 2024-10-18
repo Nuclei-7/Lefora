@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import Navbar from "../../components/Navbar";
 import "./CartPage.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../services/CartContext";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"; // Import PayPal
-
+const paypalID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const CartPage = ({ currentPage, handleNavClick }) => {
   const navigate = useNavigate();
   const { cartItems, setCartItems } = useContext(CartContext);
@@ -24,7 +24,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
   const [slider, setSlider] = useState(false);
   const [errors, setErrors] = useState({});
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [paidFor, setPaidFor] = useState(false);
+  const [showPayPal, setShowPayPal] = useState(false); // State for showing PayPal button
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -35,13 +35,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
   const handlePaymentChange = (e) => {
     const selectedPaymentMethod = e.target.value;
     setPaymentMethod(selectedPaymentMethod);
-
-    // Show PayPal button if online payment is selected
-    if (selectedPaymentMethod === "online") {
-      setSlider(true);
-    } else {
-      setSlider(false); // Hide PayPal button for other payment methods
-    }
   };
 
   // Validation logic remains the same
@@ -94,28 +87,23 @@ const CartPage = ({ currentPage, handleNavClick }) => {
     }
   };
 
-  const handleConfirmOrder = async () => {
+  const handleConfirmOrder = () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length === 0) {
       if (paymentMethod === "online") {
-        // Show PayPal for online payments
-        setSlider(true);
+        // Show PayPal for online payments when confirming the order
+        setShowPayPal(true);
       } else {
+        // Handle COD and POS order confirmations
         try {
-          const response = await axios.post(
-            "http://localhost:3001/api/orders/create",
-            {
-              cartItems,
-              deliveryInfo,
-              totalPrice,
-              scheduleDate: deliveryInfo.scheduleDate, // Include scheduleDate
-              paymentMethod: paymentMethod === "cod" ? "COD" : "POS",
-            }
-          );
-
-          if (response.data.message === "Order saved successfully!") {
-            navigate("/thankYou");
-          }
+          axios.post("http://localhost:3001/api/orders/create", {
+            cartItems,
+            deliveryInfo,
+            totalPrice,
+            scheduleDate: deliveryInfo.scheduleDate, // Include scheduleDate
+            paymentMethod: paymentMethod === "cod" ? "COD" : "POS",
+          });
+          navigate("/thankYou");
         } catch (err) {
           console.error("Error saving order:", err);
         }
@@ -151,6 +139,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
             <h2>Delivery Information</h2>
             <div className="delivery-info">
               <form>
+                {/* Form fields for delivery information */}
                 <div className="form-row">
                   <div className="form-group">
                     <label>Name</label>
@@ -286,8 +275,8 @@ const CartPage = ({ currentPage, handleNavClick }) => {
             </div>
           </div>
 
-          {/* Render PayPal Button only if online payment is selected */}
-          {paymentMethod === "online" && (
+          {/* Render PayPal Button only if confirmed */}
+          {showPayPal && paymentMethod === "online" && (
             <PayPalScriptProvider
               options={{
                 "client-id":
@@ -320,8 +309,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
 
         {/* Order Summary Section */}
         <div className="right-section-container">
-          {" "}
-          {/* New container for the right section */}
           <h2>Order Summary</h2>
           <div className="cart-items">
             {cartItems.map((item) => (
@@ -345,7 +332,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
             <h3>Total: ${totalPrice.toFixed(2)}</h3>
           </div>
           <button className="checkout-btn" onClick={handleConfirmOrder}>
-            Confirm Order
+            Proceed To Pay
           </button>
         </div>
       </div>

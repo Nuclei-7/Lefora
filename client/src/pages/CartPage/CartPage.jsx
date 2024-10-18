@@ -18,12 +18,13 @@ const CartPage = ({ currentPage, handleNavClick }) => {
     state: "",
     zip: "",
     address: "",
+    scheduleDate: "", // Add schedule date field
   });
 
   const [slider, setSlider] = useState(false);
   const [errors, setErrors] = useState({});
-  const [paymentMethod, setPaymentMethod] = useState(""); // New state for payment method
-  const [paidFor, setPaidFor] = useState(false); // To track payment status
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paidFor, setPaidFor] = useState(false);
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -32,7 +33,15 @@ const CartPage = ({ currentPage, handleNavClick }) => {
 
   // Handle payment option selection
   const handlePaymentChange = (e) => {
-    setPaymentMethod(e.target.value);
+    const selectedPaymentMethod = e.target.value;
+    setPaymentMethod(selectedPaymentMethod);
+
+    // Show PayPal button if online payment is selected
+    if (selectedPaymentMethod === "online") {
+      setSlider(true);
+    } else {
+      setSlider(false); // Hide PayPal button for other payment methods
+    }
   };
 
   // Validation logic remains the same
@@ -43,18 +52,17 @@ const CartPage = ({ currentPage, handleNavClick }) => {
       validationErrors.mobile = "Mobile number is required";
     else if (!/^[0-9]{10}$/.test(deliveryInfo.mobile))
       validationErrors.mobile = "Invalid mobile number";
-
     if (!deliveryInfo.email) validationErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(deliveryInfo.email))
       validationErrors.email = "Invalid email address";
-
     if (!deliveryInfo.city) validationErrors.city = "City is required";
     if (!deliveryInfo.state) validationErrors.state = "State is required";
     if (!deliveryInfo.zip) validationErrors.zip = "ZIP code is required";
     else if (!/^[0-9]{5,6}$/.test(deliveryInfo.zip))
       validationErrors.zip = "Invalid ZIP code";
-
     if (!deliveryInfo.address) validationErrors.address = "Address is required";
+    if (!deliveryInfo.scheduleDate)
+      validationErrors.scheduleDate = "Schedule date is required"; // Add validation for schedule date
 
     return validationErrors;
   };
@@ -72,14 +80,14 @@ const CartPage = ({ currentPage, handleNavClick }) => {
           cartItems,
           deliveryInfo,
           totalPrice,
-          paymentMethod: "PayPal", // Add the payment method here
-          orderID, // Track the PayPal order ID
+          paymentMethod: "PayPal",
+          orderID,
         }
       );
 
       if (response.data.message === "Order saved successfully!") {
         setErrors({});
-        navigate("/thankYou"); // Navigate on success
+        navigate("/thankYou");
       }
     } catch (err) {
       console.error("Error saving order:", err);
@@ -100,7 +108,8 @@ const CartPage = ({ currentPage, handleNavClick }) => {
               cartItems,
               deliveryInfo,
               totalPrice,
-              paymentMethod: "COD",
+              scheduleDate: deliveryInfo.scheduleDate, // Include scheduleDate
+              paymentMethod: paymentMethod === "cod" ? "COD" : "POS",
             }
           );
 
@@ -131,10 +140,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
         : item
     );
     setCartItems(updatedCartItems);
-  };
-
-  const handleSliderChange = () => {
-    setSlider(!slider);
   };
 
   return (
@@ -229,6 +234,18 @@ const CartPage = ({ currentPage, handleNavClick }) => {
                   />
                   {errors.address && <p className="error">{errors.address}</p>}
                 </div>
+                <div className="form-group full-width">
+                  <label>Schedule Date</label>
+                  <input
+                    type="date"
+                    name="scheduleDate"
+                    value={deliveryInfo.scheduleDate}
+                    onChange={handleInputChange}
+                  />
+                  {errors.scheduleDate && (
+                    <p className="error">{errors.scheduleDate}</p>
+                  )}
+                </div>
               </form>
             </div>
           </div>
@@ -270,7 +287,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
           </div>
 
           {/* Render PayPal Button only if online payment is selected */}
-          {paymentMethod === "online" && slider && (
+          {paymentMethod === "online" && (
             <PayPalScriptProvider
               options={{
                 "client-id":
@@ -285,7 +302,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
                     purchase_units: [
                       {
                         amount: {
-                          value: totalPrice.toFixed(2), // PayPal uses string amount
+                          value: totalPrice.toFixed(2),
                         },
                       },
                     ],
@@ -293,7 +310,7 @@ const CartPage = ({ currentPage, handleNavClick }) => {
                 }}
                 onApprove={(data, actions) => {
                   return actions.order.capture().then((details) => {
-                    handleApprove(data.orderID); // Handle successful payment
+                    handleApprove(data.orderID);
                   });
                 }}
               />
@@ -302,11 +319,18 @@ const CartPage = ({ currentPage, handleNavClick }) => {
         </div>
 
         {/* Order Summary Section */}
-        <div className="right-section">
+        <div className="right-section-container">
+          {" "}
+          {/* New container for the right section */}
           <h2>Order Summary</h2>
           <div className="cart-items">
             {cartItems.map((item) => (
               <div key={item.id} className="cart-item">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="cart-item-image"
+                />
                 <span>{item.name}</span>
                 <span>
                   <button onClick={() => handleDecrement(item.id)}>-</button>
@@ -320,7 +344,6 @@ const CartPage = ({ currentPage, handleNavClick }) => {
           <div className="total-price">
             <h3>Total: ${totalPrice.toFixed(2)}</h3>
           </div>
-
           <button className="checkout-btn" onClick={handleConfirmOrder}>
             Confirm Order
           </button>

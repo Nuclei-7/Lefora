@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   items: [
@@ -24,7 +24,11 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  scheduleDate: {
+    // Add scheduleDate to the schema
+    type: Date,
+  },
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;

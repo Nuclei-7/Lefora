@@ -163,7 +163,7 @@ const Home = () => {
 
               {/* Button to Open Overlay */}
               <button onClick={() => setIsOverlayOpen(true)} className="btn">
-                + Ask Question
+                Create Post
               </button>
             </div>
 

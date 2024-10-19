@@ -65,7 +65,7 @@ function Navbar({ currentPage, handleNavClick }) {
         </div>
       )}
 
-      <div className="right-section">
+      <div className="right-side">
         <div className="shop-link">
           <Link
             to="/shop"

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./profile.css";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Profile({ currentPage, handleNavClick }) {
   const { userId } = useParams(); // Gets the user ID from the URL
@@ -215,6 +216,7 @@ function Profile({ currentPage, handleNavClick }) {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

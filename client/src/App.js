@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
@@ -47,15 +46,6 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={
-                <LandingPage
-                  currentPage={currentPage}
-                  handleNavClick={handleNavClick}
-                />
-              }
-            />
-            <Route
-              path="/home"
               element={
                 <Home
                   data={data}

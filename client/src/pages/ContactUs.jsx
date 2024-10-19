@@ -4,6 +4,7 @@ import { ImSpinner9 } from "react-icons/im"; // Import the spinner icon from rea
 import emailjs from "@emailjs/browser"; // Import EmailJS
 import "./ContactUs.css";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function ContactUs() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -135,6 +136,8 @@ export default function ContactUs() {
           </form>
         </main>
       </div>
+      <ContactUs />
+      <Footer />
     </>
   );
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/img/profile.png";
 import "./Navbar.css";
-import logo from "../assets/img/lefora.jpeg";
+//import logo from "../assets/img/lefora.jpeg";
 
 function Navbar({ currentPage, handleNavClick }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -51,13 +51,13 @@ function Navbar({ currentPage, handleNavClick }) {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/home">
+        <Link to="/">
           <h5>LEFORA</h5>
         </Link>
       </div>
 
       {/* Search Container for Centering */}
-      {location.pathname === "/home" && (
+      {location.pathname === "/" && (
         <div className="search-container">
           <div className="search-bar">
             <input type="text" placeholder="Search topics..." />

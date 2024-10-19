@@ -11,7 +11,7 @@ const ThankYouPage = () => {
 
     // Redirect to home page after 5 seconds
     const redirectTimer = setTimeout(() => {
-      window.location.href = "/home";
+      window.location.href = "/";
     }, 5000);
 
     // Cleanup function
@@ -37,7 +37,7 @@ const ThankYouPage = () => {
         Redirecting to home in {timer} seconds...
       </p>
       <button
-        onClick={() => (window.location.href = "/home")} // Redirect to home on click
+        onClick={() => (window.location.href = "/")} // Redirect to home on click
         className="thank-you-button"
       >
         Return to Home

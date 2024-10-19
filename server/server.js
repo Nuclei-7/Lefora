@@ -12,6 +12,7 @@ const path = require("path");
 const fs = require("fs");
 const User = require("./models/userModels"); // Ensure correct path to user model
 const orderRoutes = require("./routes/orderRoutes");
+const emailRoutes = require("./routes/emailRoutes");
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, "uploads");
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoute);
 app.use("/api/orders", orderRoutes);
-
+app.use("/api", emailRoutes); // Use '/api' prefix for email routes
 // Setup Multer for multiple image uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -67,22 +68,31 @@ app.post("/upload-multiple", upload.array("images", 5), (req, res) => {
   }
 });
 // execute bash file
-app.post("/send-email", (req, res) => {
-  const { message } = req.body; // Get message from the request body
+// Email sending route
+// app.post("/send-email", (req, res) => {
+//   const { message } = req.body;
 
-  exec(`bash email.sh "${message}"`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing script: ${error.message}`);
-      return res.status(500).send("Error executing script");
-    }
-    if (stderr) {
-      console.error(`Script stderr: ${stderr}`);
-      return res.status(500).send("Error in script");
-    }
-    console.log(`Script stdout: ${stdout}`);
-    res.send("Email sent successfully!");
-  });
-});
+//   // Validate that message is provided
+//   if (!message) {
+//     return res.status(400).send("Message is required");
+//   }
+
+//   // Execute the bash script and pass the message as an argument
+//   exec(`bash email.sh "${message}"`, (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`Error executing script: ${error.message}`);
+//       return res.status(500).send("Error executing script");
+//     }
+
+//     if (stderr) {
+//       console.error(`Script stderr: ${stderr}`);
+//       return res.status(500).send("Error in script execution");
+//     }
+
+//     console.log(`Script stdout: ${stdout}`);
+//     res.send("Email sent successfully!");
+//   });
+// });
 
 // Define a sample route to test the server
 app.get("/", (req, res) => {

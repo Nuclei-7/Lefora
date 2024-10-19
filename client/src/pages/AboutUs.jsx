@@ -2,6 +2,7 @@ import React from "react";
 import "./AboutUs.css";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function AboutUs() {
   const teamMembers = [
@@ -69,6 +70,7 @@ export default function AboutUs() {
           </section>
         </main>
       </div>
+      <Footer />
     </>
   );
 }

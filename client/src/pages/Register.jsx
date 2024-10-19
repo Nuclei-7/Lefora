@@ -14,14 +14,26 @@ function Register({ currentPage, handleNavClick }) {
     e.preventDefault();
     axios
       .post("http://localhost:3001/api/users/register", {
-        // Updated URL
         name: userName,
         email,
         password,
       })
       .then((result) => {
         console.log(result);
-        navigate("/login"); // Move navigate inside then block to only redirect after success
+        // After successful registration, send the thank you email
+        axios
+          .post("http://localhost:3001/api/send-email", {
+            userEmail: email, // Pass the user's email
+            userName: userName, // Pass the user's name
+            // _id is removed here
+          })
+          .then(() => {
+            alert(
+              "Registration successful! A confirmation email has been sent."
+            );
+            navigate("/login"); // Navigate to login after success
+          })
+          .catch((err) => console.log("Error sending email:", err));
       })
       .catch((err) => console.log(err));
   };

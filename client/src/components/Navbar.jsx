@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/img/profile.png";
 import "./Navbar.css";
-import logo from "../assets/img/lefora.jpeg";
+//import logo from "../assets/img/lefora.jpeg";
 
 function Navbar({ currentPage, handleNavClick }) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -51,13 +51,13 @@ function Navbar({ currentPage, handleNavClick }) {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/home">
+        <Link to="/">
           <h5>LEFORA</h5>
         </Link>
       </div>
 
       {/* Search Container for Centering */}
-      {location.pathname === "/home" && (
+      {location.pathname === "/" && (
         <div className="search-container">
           <div className="search-bar">
             <input type="text" placeholder="Search topics..." />
@@ -65,52 +65,54 @@ function Navbar({ currentPage, handleNavClick }) {
         </div>
       )}
 
-      <div className="shop-link">
-        <Link
-          to="/shop"
-          className={`nav-link ${currentPage === "/shop" ? "active" : ""}`}
-        >
-          Lefora Shop
-        </Link>
-      </div>
-
-      {loggedIn && (
-        <div className="shop-cart">
+      <div className="right-side">
+        <div className="shop-link">
           <Link
-            to="/cart"
-            className={`nav-link ${currentPage === "/cart" ? "active" : ""}`}
+            to="/shop"
+            className={`nav-link ${currentPage === "/shop" ? "active" : ""}`}
           >
-            My Cart
+            Lefora Shop
           </Link>
         </div>
-      )}
 
-      <div className="auth-section">
-        {loggedIn ? (
-          <div className="profile" ref={dropdownRef}>
-            <img
-              src={icon}
-              alt="Profile"
-              style={{ cursor: "pointer" }}
-              onClick={() => setDropdownOpen((prev) => !prev)} // Toggle dropdown on click
-            />
-
-            {/* Dropdown menu */}
-            {dropdownOpen && (
-              <div id="navDrop" className="dropdown-menu">
-                <button onClick={handleProfileClick}>Profile</button>
-                <br />
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-            )}
+        {loggedIn && (
+          <div className="shop-cart">
+            <Link
+              to="/cart"
+              className={`nav-link ${currentPage === "/cart" ? "active" : ""}`}
+            >
+              My Cart
+            </Link>
           </div>
-        ) : (
-          <>
-            <Link to="/cart">My Cart</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
         )}
+
+        <div className="auth-section">
+          {loggedIn ? (
+            <div className="profile" ref={dropdownRef}>
+              <img
+                src={icon}
+                alt="Profile"
+                style={{ cursor: "pointer" }}
+                onClick={() => setDropdownOpen((prev) => !prev)} // Toggle dropdown on click
+              />
+
+              {/* Dropdown menu */}
+              {dropdownOpen && (
+                <div id="navDrop" className="dropdown-menu">
+                  <button onClick={handleProfileClick}>Profile</button>
+                  <br />
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link to="/cart">My Cart</Link>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

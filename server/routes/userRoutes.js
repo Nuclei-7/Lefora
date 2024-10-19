@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModels"); // Adjust path as needed
+const { exec } = require("child_process"); // for bash shell
 
 // Register route
 router.post("/register", async (req, res) => {
@@ -117,5 +118,28 @@ router.put("/change-password/:userId", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
+// router.post("/send-email", (req, res) => {
+//   const { email } = req.body; // Get the email from the request body
+
+//   // Validate that email is provided
+//   if (!email) {
+//     return res.status(400).send("Email is required");
+//   }
+
+//   // Example of executing a shell script (modify as needed)
+//   exec(`bash sendEmail.sh "${email}"`, (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`Error executing script: ${error.message}`);
+//       return res.status(500).send("Error executing script");
+//     }
+//     if (stderr) {
+//       console.error(`Script stderr: ${stderr}`);
+//       return res.status(500).send("Error in script execution");
+//     }
+//     console.log(`Script stdout: ${stdout}`);
+//     res.send("Email sent successfully!");
+//   });
+// });
 
 module.exports = router;

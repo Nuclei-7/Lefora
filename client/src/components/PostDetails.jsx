@@ -60,7 +60,7 @@ export default function PostDetails({ currentPage, handleNavClick }) {
 
     try {
       await axios.delete(`http://localhost:3001/api/posts/${id}`);
-      navigate("/home");
+      navigate("/");
       alert("Post deleted successfully!"); // Notify the user
     } catch (error) {
       alert(

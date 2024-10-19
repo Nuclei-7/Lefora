@@ -87,6 +87,13 @@
   align-items: center;
 }
 
+/* Align the links on the right side */
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Auth Section Links */
 .auth-section a {
   color: #000000;
   text-decoration: none;
